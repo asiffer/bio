@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+{% include head.html %}
+<div id="page">
+	<body>
+		<header>
+			<div class="subtitle">{{ page.title }}</div>
+			<div class="title">{{ site.title }}</div>
+		</header>
+		<content>
+			<div class="aside">{% include aside.html %}</div>
+			<div class="main">{{ content }}</div>
+		</content>	
+	</body>
+	<footer>
+	</footer>
+</div>
+</html>

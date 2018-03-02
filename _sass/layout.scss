@@ -1,0 +1,235 @@
+#page {
+	margin: 0 auto;
+	width: 100%;
+	font-size: 100%;
+	height: 100%;
+}
+
+body {
+	margin: 0 auto;
+	width: 70%;
+	height: 100%;
+	overflow: auto;
+}
+
+a {
+	color: $color3;
+	&:hover {
+		color: $color2;
+	}
+}
+
+h2 {
+	font: bold 1.4em $font7;
+}
+
+figure,figcaption {
+	display: block;
+	float: left;
+	margin: 0 auto;
+	width: 100%;
+}
+
+img {
+	display: block;
+	max-width: 100%;
+	width: 70%;
+	float: center;
+	margin: 0 auto;
+}
+
+figcaption {
+	text-align: center;
+	text-transform: uppercase;
+}
+
+header {
+	float: top;
+	margin: 0 auto;
+	width: 100%;
+}
+
+header .title {
+	float: left;
+	margin: 0 auto;
+	width: 75%;
+	font: normal 4em $font2;
+	display: block;
+	padding: 0;
+	color: $color1;
+	text-align: right;
+	
+}
+
+header .subtitle {
+	float: right;
+	margin: 0 auto;
+	width: 25%;
+	font: bold 2.5em $font5;
+	padding: 0.65em 0;
+	color: $color2;
+	text-align: right;
+}
+
+content {
+	float: right;
+	width: 100%;
+	margin: 0 auto;
+	color: $color1;
+	line-height: 1.5;
+	font: normal 1em $font6;
+	height: 100%;
+	-webkit-font-smoothing: antialiased;
+}
+
+content .aside {
+	float: left;
+	margin: 0 auto;
+	width: 30%;
+	height: 100%;
+	background-color: $color0;
+	font-size: 1em;
+}
+
+
+
+content .aside .menu {
+	float: left;
+	height: 100%;
+	margin: 0 auto;
+	text-align: center;
+	font: normal 1em $font1;
+}
+
+content .aside .menu a {
+	float: left;
+	margin: 0 auto;
+	width: 100%;
+	font: normal 1.8em $font5;
+	text-decoration: none;
+	color: $color1;
+	padding: 0.5em 0;
+}
+
+content .aside .menu a:hover {
+	color: $color3;
+	text-decoration: none;
+}
+
+
+
+
+content .main {
+	float: left;
+	width: 70%;
+	margin: 0 auto;
+	text-align: justify;
+	font: normal 1.2em $font7;
+}
+
+footer {
+	float: left;
+	width: 100%;
+	height: 5em;
+}
+
+pre, code {
+	font-family: $font8;
+}
+
+@media screen and (max-width: 1200px) {
+	header .title {
+		text-align: center;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	body {
+		width: 90%;
+	}
+	
+	h2 {
+		font-size: 1.2em;
+	}
+
+	content {
+		float: left;
+		width: 100%;
+		margin: 0 auto;
+	}
+	
+	content .aside {
+		float: left;
+		margin: 0 auto;
+		width: 100%;
+		font-size: 1em;
+	}
+	
+	content .aside .menu {
+		float: left;
+		width: 100%;
+		font: normal 0.8em $font1;
+		display: flex;
+	}
+	
+	content .aside .menu a {
+		float: left;
+		margin: 0 auto;
+		width: auto;
+
+	}
+	
+	
+	content .main {
+		float: left;
+		width: 100%;
+		margin: 0 auto;
+		font-size: 1em;
+	}
+	
+	header {
+		width: 95%;
+	}
+	
+	header .title {
+		text-align: left;
+		font-size: 2.7em;
+	}
+	
+	header .subtitle {
+		font-size: 1.8em;
+		padding-top: 0.6em;
+		text-align: right;
+	}
+	
+	img {
+		display: block;
+		max-width: 100%;
+		width: 70%;
+		float: center;
+		margin: 0 auto;
+	}
+} 
+
+
+@media screen and (max-width: 430px) {
+
+	content {
+		font-size: 0.8em;
+	}
+	
+	header {
+		width: 95%;
+	}
+	
+	header .title {
+		font-size: 2.1em;
+	}
+	
+	header .subtitle {
+		font-size: 1.4em;
+		padding-top: 0.55em;
+	}
+	
+} 
+
