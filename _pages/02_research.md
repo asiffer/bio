@@ -4,7 +4,7 @@ title: Research
 permalink: /research/
 ---
 
-My researches maily focus on statistical learning. As cyber-security is a hard context (high throughput data, lack of ground truth), I try to develop unsupervised methods to mine streaming data.
+My researches mainly focus on statistical learning. As cyber-security is a hard context (high throughput data, lack of ground truth), I try to develop unsupervised methods to mine streaming data.
 
 ### Publications
 

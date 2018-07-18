@@ -11,7 +11,7 @@ I am a Ph.D. student under the supervision of Pierre-Alain Fouque and Alexandre 
 
 My Ph.D. is funded by <a href="https://www.amossys.fr/">Amossys</a> which is a pure player cyber-security company in Rennes.
 
-My thesis deals with **cyber-attacks detection with statistical learning methods**. The idea is to bridge from AI (I apologize for this run-of-the-mill word) to cyber-security.
+My thesis deals with **cyber-attacks detection with statistical learning methods**. The idea is to bridge from AI to cyber-security (I apologize for these run-of-the-mill keywords).
 
 
 <figure><img src="/assets/ml.svg"></figure>

@@ -54,16 +54,23 @@
 <p>In our work, we developped an algorithm aimed to detect outliers in streaming data: SPOT.
 <strong>libspot</strong> is a C++ library which mainly implements it.</p>
 
-<p>Recently we released <strong>python3-libspot</strong> which embeds <code class="highlighter-rouge">python3</code> bindings to libspot.</p>
+<p>We also released <strong>python3-libspot</strong> which embeds <code class="highlighter-rouge">python3</code> bindings to libspot.</p>
 
 <p>This code is hosted on <a href="https://asiffer.github.io/libspot/">github</a> and <a href="https://launchpad.net/~asiffer/+archive/ubuntu/libspot">launchpad</a>
-(so you can just add my ppa to your debian/ubuntu system, use <code class="highlighter-rouge">apt-get</code> magic command and you are done!)</p>
+(so you can just add my ppa to your debian/ubuntu system, use <code class="highlighter-rouge">apt</code> magic command and you are done!)</p>
+
+<p>Furthermore, I develop a kind of plugin for <a href="https://www.bro.org/">Bro</a> (an Intrusion Detection System) which uses SPOT instances to monitor some network features. When an anomaly occurs, the plugin sends the event to the Bro agent. It is based on <a href="https://www.bro.org/sphinx/components/broccoli/broccoli-manual.html">Broccoli</a>, the Bro client communication library.</p>
 
 <hr />
 
-<h2>Rfolding</h2>
-<p>I am currently working on a <code class="highlighter-rouge">R</code> library which implements a new statistical test of unimodality.</p>
+<h2>libfolding</h2>
 
+<p>We have also published a new statistical test aimed to detect whether the distribution of your data is <em>unimodal</em> or <em>multimodal</em>. It works in multidimensional and even streaming data. It is called the <strong>Folding Test of Unimodality</strong> (or FTU). 
+I developped a <code class="highlighter-rouge">C++</code> library and its <code class="highlighter-rouge">python3</code> bindings too.</p>
+
+<p>The code is also hosted on <a href="https://github.com/asiffer/libfolding">github</a> and <a href="https://launchpad.net/~asiffer/+archive/ubuntu/libfolding">launchpad</a> (but through a different ppa).</p>
+
+<p>I have also a <code class="highlighter-rouge">R</code> package but is not released yet.</p>
 </div>
 		</content>	
 	</body>
