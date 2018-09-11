@@ -115,13 +115,35 @@ content .main {
   text-align: justify;
   font: normal 1.2em "Neucha"; }
 
+content .main .subtitle {
+  float: left;
+  margin: 0 auto;
+  width: 100%;
+  font: bold 2.25em "Shadows Into Light Two";
+  padding: 0.65em 0;
+  color: #E29930;
+  text-align: left; }
+
 footer {
   float: left;
   width: 100%;
   height: 5em; }
 
-pre, code {
-  font-family: "Ubuntu Mono"; }
+.highlight {
+  padding: 0.25em;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-radius: 0.5em;
+  background: #32384D;
+  white-space: pre-wrap; }
+
+.highlight code {
+  font-family: "Ubuntu Mono";
+  color: #E29930; }
+
+code {
+  font-family: "Ubuntu Mono";
+  color: #217CA3; }
 
 @media screen and (max-width: 1200px) {
   header .title {

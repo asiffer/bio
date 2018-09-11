@@ -8,10 +8,18 @@ permalink: /misc/
 
 **2017-2018** -- Informatique, Master 1 préparation CAPES
 
-**2016-2017** -- Projet VET, Master2 SSI, Rennes.  
+**2016-2017** -- Projet VET, Master2 SSI, Rennes.
 I supervised four students on cyber-security on a machine learning project. They implement and analyze the DBSCAN algorithm. Moreover they test it on several datasets et compare it with other common methods. 
 
+## Posts
 
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a>
+    </li>
+  {% endfor %}
+</ul>
 
 ## Other
 

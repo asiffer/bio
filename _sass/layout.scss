@@ -118,7 +118,6 @@ content .aside .menu a:hover {
 
 
 
-
 content .main {
 	float: left;
 	width: 70%;
@@ -127,14 +126,39 @@ content .main {
 	font: normal 1.2em $font7;
 }
 
+content .main .subtitle {
+	float: left;
+	margin: 0 auto;
+	width: 100%;
+	font: bold 2.25em $font5;
+	padding: 0.65em 0;
+	color: $color2;
+	text-align: left;
+}
+
 footer {
 	float: left;
 	width: 100%;
 	height: 5em;
 }
 
-pre, code {
+.highlight  { 
+	padding: 0.25em;
+	padding-left: 1em;
+	padding-right: 1em;
+	border-radius: 0.5em; 
+	background: $color1; 
+	white-space: pre-wrap;
+}
+
+.highlight code {
 	font-family: $font8;
+	color: $color2;
+}
+
+code {
+	font-family: $font8;
+	color: $color3;
 }
 
 @media screen and (max-width: 1200px) {
