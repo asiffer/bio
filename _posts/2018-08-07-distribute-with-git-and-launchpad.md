@@ -15,7 +15,7 @@ make
 make install
 ```
 
-However, it looks a bit handmade: of course, you don't need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone. Moreover, for all the linux users which can use yor work, this is not handled by their package manager: just think about the uninstall or update process ...
+However, it looks a bit handmade: of course, you don't need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone. Moreover, for all the linux users which can use your work, this is not handled by their package manager: just think about the uninstall or update process ...
 
 Obviously, many ways exist to solve these drawbacks. Here we want to explain how you can distribute your work through debian packages and make it available for ubuntu user with a personal package archive (you know the `ppa:/...` you can add to your `/etc/apt/sources.list`).
 
@@ -135,7 +135,7 @@ Once you have modifed the previous files, you are able to build your first packa
 git add debian/
 git commit -m "Towards a debian package"
 ```
-Then we use `gbp` to create the debian package. In `mytool/` folder:
+Then we use `gbp` command (from the `git-buildpackage` package) to create the debian package. In `mytool/` folder:
 ```bash
 gbp buildpackage --git-ignore-new
 ```
@@ -201,7 +201,7 @@ lp:~USER/+git/mytool 	Development 	... 	        ...
 
 You can click on it and then "Create packaging recipe". You have to fill some basic information. A noticable thing is the **Default distribution series**: they are the Ubuntu versions for which the package will be built.
 
-Moreover, the text of the recipe can be customized. In particular, you can change the debian versioning scheme. A common pattern is the following: `{debupstream}-0~{revno}` where `debupstream` is the classical version (i.e. `1.0` is our case) and `revno` is a counter incremented at each change.
+Moreover, the text of the recipe can be customized. In particular, you can change the debian versioning scheme. A common pattern is the following: `{debupstream}~{revno}` where `debupstream` is the classical version (i.e. `1.0` is our case) and `revno` is a counter incremented at each change.
 
 Actually, all the parameters of the recipe can be changed afterwards.
 
@@ -219,6 +219,78 @@ sudo apt install mytool
 ```
 
 
-# Step 3: Workflow with GitHub
+# Step 3: Workflow
 
 Ok, we have a local git repo and two remote ones (GitHub+Launchpad for example). Builds are made on Launchpad (and are available through yout ppa), but your releases can also be hosted on GitHub.
+
+## Creating a new version
+
+You have your local source code and you make it directly available on your Github repo or through a debian package from your ppa.
+
+Everytime you push to launchpad, it increments the revision number. So initially, launchpad builds `mytool_1.0-1` (with the scheme `{debupstream}~{revno}`) and then it will build `mytool_1.0-2`, `mytool_1.0-3` (at the second and third push) etc.
+
+This is very nice because the user could receive these updates through its package manager.
+However, you can make many minor commits (not deserving a new version) although sometimes you naturally commit some very huge and useful changes, putting your tool at higher level. At this moment, you want to make a new version!
+
+Once again, we use `gbp`. In particular, the command `dch` generates Debian changelog entries from git commit messages. It means that all your commits (not registered in the previous version) will be written in the `debian/changelog` (this file also embeds the upstream version of your tool). 
+
+With the following command, you create a new version of your tool (1.1). It prompts you the changelog file on your favorite terminal text editor. So you can edit and verify all the details.
+```
+gbp dch --new-version 1.1
+```
+If your work is quite stable you can add the `--release` option to mark it as a release.
+You can also commit the changelog by adding the `--commit` option (the default message will be "Update changelog for %(version)s release").
+
+## Working with GitHub releases
+
+You probably know tha GitHub can manage releases through tags. When you create a new version, the idea would be to create the git tag in the same time so as to create a new package in the launchpad side and a new release on the GitHub side. And you can also upload the .deb packages created on launchpad to the GitHub release (as "release assets"). 
+
+The process is the following: add your new code to git, create the new version, commit, tag and push!
+```
+# add your changes
+git add -a
+# create the new version and commit everything
+git dch --new-version X.X --commit
+# tag the commit (its name will be "debian/X.X")
+gbp buildpackage --git-tag-only
+# push the tag
+git push origin --tags
+git push launchpad --tags
+```
+
+Instead of using `gbp`, the tag can be done manually. The equivalent is:
+```
+git tag -a debian/X.X -m "Update changelog for X.X release"
+```
+
+When you push the tag, you can also precise the tag you want to push (the command `--tags` push all the tags) through:
+```
+git push origin debian/X.X
+```
+
+Warning: if you push normally on launchpad, a new package is naturally built. If after that you push the tag, some build/upload problems can occur because the revision number did not change (so it cannot replace the previous package with a new package with the same version).
+
+## Final workflow
+
+```
+# you have written new code ...
+# you can check locally if your package builds correctly
+gbp buildpackage
+
+# if everything is ok, you can add your changes
+git add -a
+
+# if you want to create a new version...
+# update the changelog (the --commit option will also commit the changes previously added)
+git dch --new-version X.X --commit
+# create the corresponding tag (its name will be "debian/X.X")
+gbp buildpackage --git-tag-only
+# then push
+git push origin --tags
+git push launchpad --tags
+
+# otherwise
+git commit -m "your minor changes"
+git push origin master
+git push launchpad master
+```
