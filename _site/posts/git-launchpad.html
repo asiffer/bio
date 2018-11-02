@@ -7,7 +7,7 @@
 
 
 	<link rel="stylesheet" href="/css/main.css">
-	<link rel="canonical" href="http://localhost:4000/posts/git-launchpad">
+	<link rel="canonical" href="/posts/git-launchpad">
 	<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 		
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans rel='stylesheet'>
@@ -44,7 +44,7 @@
 <a href="/software/">Software</a>
   
 <a href="/misc/">Misc</a>
-         
+     
 </div>
 
 </div>
@@ -56,10 +56,10 @@
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://remote.site/mytool.git
 <span class="nb">cd </span>mytool/
 make
-make <span class="nb">install</span>
+make install
 </code></pre></div></div>
 
-<p>However, it looks a bit handmade: of course, you don’t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone. Moreover, for all the linux users which can use yor work, this is not handled by their package manager: just think about the uninstall or update process …</p>
+<p>However, it looks a bit handmade: of course, you don’t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone. Moreover, for all the linux users which can use your work, this is not handled by their package manager: just think about the uninstall or update process …</p>
 
 <p>Obviously, many ways exist to solve these drawbacks. Here we want to explain how you can distribute your work through debian packages and make it available for ubuntu user with a personal package archive (you know the <code class="highlighter-rouge">ppa:/...</code> you can add to your <code class="highlighter-rouge">/etc/apt/sources.list</code>).</p>
 
@@ -125,7 +125,7 @@ Are the details correct? [Y/n/q]
 <h2 id="editing-debian-files">Editing debian/* files</h2>
 <p>Now, we have to edit files in the <code class="highlighter-rouge">debian/</code> folder. First there are a lot of examples that we can remove</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>debian/
-<span class="nb">rm</span> <span class="k">*</span>.ex <span class="k">*</span>.EX
+rm <span class="k">*</span>.ex <span class="k">*</span>.EX
 </code></pre></div></div>
 
 <p>Without too much details we have to ensure that the file <code class="highlighter-rouge">source/format</code> contains “<strong>3.0 (native)</strong>” (and not “3.0 (quilt)”). The <em>quilt</em> format use sucessive patches to modify your code from the original <code class="highlighter-rouge">mytool_1.0.orig.tar.xz</code> to your current version. Here we prefer build the package independently (without commiting the package changes etc.), in a kind of snapshot way.</p>
@@ -166,7 +166,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libxxx
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add debian/
 git commit <span class="nt">-m</span> <span class="s2">"Towards a debian package"</span>
 </code></pre></div></div>
-<p>Then we use <code class="highlighter-rouge">gbp</code> to create the debian package. In <code class="highlighter-rouge">mytool/</code> folder:</p>
+<p>Then we use <code class="highlighter-rouge">gbp</code> command (from the <code class="highlighter-rouge">git-buildpackage</code> package) to create the debian package. In <code class="highlighter-rouge">mytool/</code> folder:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gbp buildpackage <span class="nt">--git-ignore-new</span>
 </code></pre></div></div>
 <p>The <code class="highlighter-rouge">git-ignore-new</code> options means that we want to build the package even if some changes have not been commited.
@@ -226,7 +226,7 @@ lp:~USER/+git/mytool 	Development 	... 	        ...
 
 <p>You can click on it and then “Create packaging recipe”. You have to fill some basic information. A noticable thing is the <strong>Default distribution series</strong>: they are the Ubuntu versions for which the package will be built.</p>
 
-<p>Moreover, the text of the recipe can be customized. In particular, you can change the debian versioning scheme. A common pattern is the following: <code class="highlighter-rouge">{debupstream}-0~{revno}</code> where <code class="highlighter-rouge">debupstream</code> is the classical version (i.e. <code class="highlighter-rouge">1.0</code> is our case) and <code class="highlighter-rouge">revno</code> is a counter incremented at each change.</p>
+<p>Moreover, the text of the recipe can be customized. In particular, you can change the debian versioning scheme. A common pattern is the following: <code class="highlighter-rouge">{debupstream}~{revno}</code> where <code class="highlighter-rouge">debupstream</code> is the classical version (i.e. <code class="highlighter-rouge">1.0</code> is our case) and <code class="highlighter-rouge">revno</code> is a counter incremented at each change.</p>
 
 <p>Actually, all the parameters of the recipe can be changed afterwards.</p>
 
@@ -239,12 +239,79 @@ lp:~USER/+git/mytool 	Development 	... 	        ...
 <p>Once your builds succeed, you have available package in your PPA. For Ubuntu users, then can add your PPA to their <code class="highlighter-rouge">/etc/apt/sources.list</code>. Then they will be able to browse your package, install and update it easily.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>add-apt-repository ppa:USER/REPOSITORY-NAME
 <span class="nb">sudo </span>apt update
-<span class="nb">sudo </span>apt <span class="nb">install </span>mytool
+<span class="nb">sudo </span>apt install mytool
 </code></pre></div></div>
 
-<h1 id="step-3-workflow-with-github">Step 3: Workflow with GitHub</h1>
+<h1 id="step-3-workflow">Step 3: Workflow</h1>
 
 <p>Ok, we have a local git repo and two remote ones (GitHub+Launchpad for example). Builds are made on Launchpad (and are available through yout ppa), but your releases can also be hosted on GitHub.</p>
+
+<h2 id="creating-a-new-version">Creating a new version</h2>
+
+<p>You have your local source code and you make it directly available on your Github repo or through a debian package from your ppa.</p>
+
+<p>Everytime you push to launchpad, it increments the revision number. So initially, launchpad builds <code class="highlighter-rouge">mytool_1.0-1</code> (with the scheme <code class="highlighter-rouge">{debupstream}~{revno}</code>) and then it will build <code class="highlighter-rouge">mytool_1.0-2</code>, <code class="highlighter-rouge">mytool_1.0-3</code> (at the second and third push) etc.</p>
+
+<p>This is very nice because the user could receive these updates through its package manager.
+However, you can make many minor commits (not deserving a new version) although sometimes you naturally commit some very huge and useful changes, putting your tool at higher level. At this moment, you want to make a new version!</p>
+
+<p>Once again, we use <code class="highlighter-rouge">gbp</code>. In particular, the command <code class="highlighter-rouge">dch</code> generates Debian changelog entries from git commit messages. It means that all your commits (not registered in the previous version) will be written in the <code class="highlighter-rouge">debian/changelog</code> (this file also embeds the upstream version of your tool).</p>
+
+<p>With the following command, you create a new version of your tool (1.1). It prompts you the changelog file on your favorite terminal text editor. So you can edit and verify all the details.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gbp dch --new-version 1.1
+</code></pre></div></div>
+<p>If your work is quite stable you can add the <code class="highlighter-rouge">--release</code> option to mark it as a release.
+You can also commit the changelog by adding the <code class="highlighter-rouge">--commit</code> option (the default message will be “Update changelog for %(version)s release”).</p>
+
+<h2 id="working-with-github-releases">Working with GitHub releases</h2>
+
+<p>You probably know tha GitHub can manage releases through tags. When you create a new version, the idea would be to create the git tag in the same time so as to create a new package in the launchpad side and a new release on the GitHub side. And you can also upload the .deb packages created on launchpad to the GitHub release (as “release assets”).</p>
+
+<p>The process is the following: add your new code to git, create the new version, commit, tag and push!</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># add your changes
+git add -a
+# create the new version and commit everything
+git dch --new-version X.X --commit
+# tag the commit (its name will be "debian/X.X")
+gbp buildpackage --git-tag-only
+# push the tag
+git push origin --tags
+git push launchpad --tags
+</code></pre></div></div>
+
+<p>Instead of using <code class="highlighter-rouge">gbp</code>, the tag can be done manually. The equivalent is:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag -a debian/X.X -m "Update changelog for X.X release"
+</code></pre></div></div>
+
+<p>When you push the tag, you can also precise the tag you want to push (the command <code class="highlighter-rouge">--tags</code> push all the tags) through:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin debian/X.X
+</code></pre></div></div>
+
+<p>Warning: if you push normally on launchpad, a new package is naturally built. If after that you push the tag, some build/upload problems can occur because the revision number did not change (so it cannot replace the previous package with a new package with the same version).</p>
+
+<h2 id="final-workflow">Final workflow</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># you have written new code ...
+# you can check locally if your package builds correctly
+gbp buildpackage
+
+# if everything is ok, you can add your changes
+git add -a
+
+# if you want to create a new version...
+# update the changelog (the --commit option will also commit the changes previously added)
+git dch --new-version X.X --commit
+# create the corresponding tag (its name will be "debian/X.X")
+gbp buildpackage --git-tag-only
+# then push
+git push origin --tags
+git push launchpad --tags
+
+# otherwise
+git commit -m "your minor changes"
+git push origin master
+git push launchpad master
+</code></pre></div></div>
 
 			</div>
 		</content>	
