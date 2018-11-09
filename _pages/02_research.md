@@ -8,9 +8,10 @@ My researches mainly focus on statistical learning. As cyber-security is a hard 
 
 ### Publications
 
+*Siffer, A., Fouque, P. A., Termier, A., & Largouët, C. (2018, July).* **_Are your data gathered?._** *In Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining (pp. 2210-2218). ACM.*
+
 *Siffer, A., Fouque, P. A., Termier, A., & Largouet, C. (2017, August).* **_Anomaly detection in streams with extreme value theory._** *In Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 1067-1075). ACM  [[HAL](https://hal.archives-ouvertes.fr/hal-01640325/file/siffer_kdd_17.pdf)]*
 
-*Siffer, A., Fouque, P. A., Termier, A., & Largouët, C. (2018, July).* **_Are your data gathered?._** *In Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining (pp. 2210-2218). ACM.*
 
 ### Talks
 

@@ -243,12 +243,12 @@ You can also commit the changelog by adding the `--commit` option (the default m
 
 ## Working with GitHub releases
 
-You probably know tha GitHub can manage releases through tags. When you create a new version, the idea would be to create the git tag in the same time so as to create a new package in the launchpad side and a new release on the GitHub side. And you can also upload the .deb packages created on launchpad to the GitHub release (as "release assets"). 
+You probably know that GitHub can manage releases through tags. When you create a new version, the idea would be to create the git tag in the same time so as to create a new package in the launchpad side and a new release on the GitHub side. And you can also upload the .deb packages created on launchpad to the GitHub release (as "release assets"). 
 
 The process is the following: add your new code to git, create the new version, commit, tag and push!
 ```
 # add your changes
-git add -a
+git add -u
 # create the new version and commit everything
 git dch --new-version X.X --commit
 # tag the commit (its name will be "debian/X.X")
@@ -278,7 +278,7 @@ Warning: if you push normally on launchpad, a new package is naturally built. If
 gbp buildpackage
 
 # if everything is ok, you can add your changes
-git add -a
+git add -u
 
 # if you want to create a new version...
 # update the changelog (the --commit option will also commit the changes previously added)
