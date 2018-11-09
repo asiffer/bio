@@ -25,4 +25,6 @@ I developped a `C++` library and its `python3` bindings too.
 
 The code is also hosted on <a href="https://github.com/asiffer/libfolding">github</a> and <a href="https://launchpad.net/~asiffer/+archive/ubuntu/libfolding">launchpad</a> (but through a different ppa).
 
-I have also a `R` package but is not released yet.
+Yes, an `R` package exists too! Initially you can find it on <a href="https://github.com/asiffer/Rfolding">github</a> but recently (october 2018) it has been made available on CRAN through the name `Rfolding`. This is a pure `R` package. I apologize for the documentation which is rather minimalist. 
+
+In the future, I will make a nice webpage to give more tips to use the FTU.
