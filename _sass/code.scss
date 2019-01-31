@@ -1,0 +1,55 @@
+
+.language-console.highlighter-rouge {
+    
+    pre code {
+        // background-color: $color0;
+        color: $color0;
+        /*.o {
+            color: $color-myw-3;
+        }*/
+        .nt {
+            color: $color-mustard;
+        }
+        .nb {
+            color: $color-mustard;
+        }
+        .go {
+            color: $color-granite;
+        }
+        .c {
+            color: $color-cerulean;
+        }
+    }
+}
+
+
+
+.language-ini.highlighter-rouge {
+    pre code {
+        // background-color: $color0;
+        color: $color0;
+        .nn {
+            color: $color-mustard;
+        }
+        .c {
+            color: $color-greenery;
+        }
+        .s {
+            color: $color-bluesky;
+        }
+    }
+}
+
+
+.language-sql.highlighter-rouge {
+    pre code {
+        // background-color: $color0;
+        color: $color0;
+        .n, .o {
+            color: $color-granite;
+        }
+        .k {
+            color: $color-firework;
+        }
+    }
+}

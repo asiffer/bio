@@ -7,7 +7,7 @@
 
 
 	<link rel="stylesheet" href="/css/main.css">
-	<link rel="canonical" href="/posts/git-launchpad">
+	<link rel="canonical" href="http://localhost:4000/posts/git-launchpad">
 	<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 		
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans rel='stylesheet'>
@@ -44,7 +44,7 @@
 <a href="/software/">Software</a>
   
 <a href="/misc/">Misc</a>
-     
+         
 </div>
 
 </div>
@@ -56,7 +56,7 @@
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://remote.site/mytool.git
 <span class="nb">cd </span>mytool/
 make
-make install
+make <span class="nb">install</span>
 </code></pre></div></div>
 
 <p>However, it looks a bit handmade: of course, you don’t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone. Moreover, for all the linux users which can use your work, this is not handled by their package manager: just think about the uninstall or update process …</p>
@@ -125,7 +125,7 @@ Are the details correct? [Y/n/q]
 <h2 id="editing-debian-files">Editing debian/* files</h2>
 <p>Now, we have to edit files in the <code class="highlighter-rouge">debian/</code> folder. First there are a lot of examples that we can remove</p>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>debian/
-rm <span class="k">*</span>.ex <span class="k">*</span>.EX
+<span class="nb">rm</span> <span class="k">*</span>.ex <span class="k">*</span>.EX
 </code></pre></div></div>
 
 <p>Without too much details we have to ensure that the file <code class="highlighter-rouge">source/format</code> contains “<strong>3.0 (native)</strong>” (and not “3.0 (quilt)”). The <em>quilt</em> format use sucessive patches to modify your code from the original <code class="highlighter-rouge">mytool_1.0.orig.tar.xz</code> to your current version. Here we prefer build the package independently (without commiting the package changes etc.), in a kind of snapshot way.</p>
@@ -239,7 +239,7 @@ lp:~USER/+git/mytool 	Development 	... 	        ...
 <p>Once your builds succeed, you have available package in your PPA. For Ubuntu users, then can add your PPA to their <code class="highlighter-rouge">/etc/apt/sources.list</code>. Then they will be able to browse your package, install and update it easily.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>add-apt-repository ppa:USER/REPOSITORY-NAME
 <span class="nb">sudo </span>apt update
-<span class="nb">sudo </span>apt install mytool
+<span class="nb">sudo </span>apt <span class="nb">install </span>mytool
 </code></pre></div></div>
 
 <h1 id="step-3-workflow">Step 3: Workflow</h1>
@@ -265,11 +265,11 @@ You can also commit the changelog by adding the <code class="highlighter-rouge">
 
 <h2 id="working-with-github-releases">Working with GitHub releases</h2>
 
-<p>You probably know tha GitHub can manage releases through tags. When you create a new version, the idea would be to create the git tag in the same time so as to create a new package in the launchpad side and a new release on the GitHub side. And you can also upload the .deb packages created on launchpad to the GitHub release (as “release assets”).</p>
+<p>You probably know that GitHub can manage releases through tags. When you create a new version, the idea would be to create the git tag in the same time so as to create a new package in the launchpad side and a new release on the GitHub side. And you can also upload the .deb packages created on launchpad to the GitHub release (as “release assets”).</p>
 
 <p>The process is the following: add your new code to git, create the new version, commit, tag and push!</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># add your changes
-git add -a
+git add -u
 # create the new version and commit everything
 git dch --new-version X.X --commit
 # tag the commit (its name will be "debian/X.X")
@@ -296,7 +296,7 @@ git push launchpad --tags
 gbp buildpackage
 
 # if everything is ok, you can add your changes
-git add -a
+git add -u
 
 # if you want to create a new version...
 # update the changelog (the --commit option will also commit the changes previously added)

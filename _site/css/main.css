@@ -1,5 +1,6 @@
 /* Palette1 */
 /* Palette 2 */
+/* Extra */
 @import url(http://fonts.googleapis.com/css?family=Oswald:400,300,700,900);
 @import url(http://fonts.googleapis.com/css?family=OpenSans:400,300,700,900);
 *,
@@ -214,3 +215,32 @@ code {
   header .subtitle {
     font-size: 1.4em;
     padding-top: 0.55em; } }
+.language-console.highlighter-rouge pre code {
+  color: #FFFFFF;
+  /*.o {
+      color: $color-myw-3;
+  }*/ }
+  .language-console.highlighter-rouge pre code .nt {
+    color: #E29930; }
+  .language-console.highlighter-rouge pre code .nb {
+    color: #E29930; }
+  .language-console.highlighter-rouge pre code .go {
+    color: #B7B8B6; }
+  .language-console.highlighter-rouge pre code .c {
+    color: #217CA3; }
+
+.language-ini.highlighter-rouge pre code {
+  color: #FFFFFF; }
+  .language-ini.highlighter-rouge pre code .nn {
+    color: #E29930; }
+  .language-ini.highlighter-rouge pre code .c {
+    color: #6FB98F; }
+  .language-ini.highlighter-rouge pre code .s {
+    color: #4CB5F5; }
+
+.language-sql.highlighter-rouge pre code {
+  color: #FFFFFF; }
+  .language-sql.highlighter-rouge pre code .n, .language-sql.highlighter-rouge pre code .o {
+    color: #B7B8B6; }
+  .language-sql.highlighter-rouge pre code .k {
+    color: #F55449; }

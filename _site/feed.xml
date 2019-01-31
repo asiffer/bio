@@ -1,4 +1,455 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-09-11T14:14:53+02:00</updated><id>http://localhost:4000/</id><title type="html">Alban Siffer</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Distribute your work with Git and Launchpad</title><link href="http://localhost:4000/posts/git-launchpad" rel="alternate" type="text/html" title="Distribute your work with Git and Launchpad" /><published>2018-08-07T00:00:00+02:00</published><updated>2018-08-07T00:00:00+02:00</updated><id>http://localhost:4000/posts/distribute-with-git-and-launchpad</id><content type="html" xml:base="http://localhost:4000/posts/git-launchpad">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-01-31T17:13:01+01:00</updated><id>http://localhost:4000/</id><title type="html">Alban Siffer</title><subtitle>This is my personal webpage</subtitle><entry><title type="html">Fancy Threat Intel’ with Cowrie/MySQL/Grafana stack</title><link href="http://localhost:4000/posts/cowrie" rel="alternate" type="text/html" title="Fancy Threat Intel' with Cowrie/MySQL/Grafana stack" /><published>2019-01-25T00:00:00+01:00</published><updated>2019-01-25T00:00:00+01:00</updated><id>http://localhost:4000/posts/fancy-threat_intel</id><content type="html" xml:base="http://localhost:4000/posts/cowrie">&lt;p&gt;We all dream of this world map with cyber attacks between countries like this one or the one of &lt;a href=&quot;https://cybermap.kaspersky.com/&quot;&gt;Kaspersky&lt;/a&gt;. In this post, we will try to do threat intelligence at our modest level. We will consider a basic system open on the Internet, in the grip of cyber-attackers. In this context, we will collect attacks information so as to make a fancy dashboard to visualize what is going on.&lt;/p&gt;
+
+&lt;p&gt;We will use Cowrie to draw attackers’ attention (ssh honeypot), MySQL to store the collected data and Grafana to build a dashboard.&lt;/p&gt;
+
+&lt;figure&gt;&lt;img style=&quot;width: 100%; margin: 1em 0;&quot; src=&quot;https://digitalguardian.com/sites/default/files/47275200_m.jpg&quot; /&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#context&quot;&gt;Context&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#cowrie&quot;&gt;Cowrie&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#before-installing-cowrie&quot;&gt;Before installing cowrie&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#getting-sources&quot;&gt;Getting sources&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#configure&quot;&gt;Configure&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#listening-port&quot;&gt;Listening port&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#accepted-connections&quot;&gt;Accepted connections&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#start-cowrie&quot;&gt;Start cowrie&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#mysql&quot;&gt;MySQL&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#requirements&quot;&gt;Requirements&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#configuration&quot;&gt;Configuration&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#back-to-cowrie&quot;&gt;Back to cowrie&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#grafana&quot;&gt;Grafana&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#installation&quot;&gt;Installation&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#configuration-(https)&quot;&gt;Configuration (HTTPS)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#administration&quot;&gt;Administration&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#first-panels&quot;&gt;First panels&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#last-credentials&quot;&gt;Last credentials&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#number-of-unique-ip-addresses&quot;&gt;Number of unique IP addresses&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#attacking-periods&quot;&gt;Attacking periods&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;context&quot;&gt;Context&lt;/h1&gt;
+
+&lt;p&gt;In this basic threat intel’ experiment, we assume having a headless system with a public IP (SERVER_IP) and a domain name (DOMAIN_NAME). We can connect to the server through ssh.&lt;/p&gt;
+
+&lt;p&gt;We will first install Cowrie, then MySQL and finally Grafana. Cowrie is a honeypot which will listen on SERVER_IP:22. MySQL will only listen on localhost while Grafana will listen on SERVER_IP:30003.&lt;/p&gt;
+
+&lt;h1 id=&quot;cowrie&quot;&gt;Cowrie&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/cowrie/cowrie&quot;&gt;Cowrie&lt;/a&gt; is a common ssh honeypot aimed to log connection attempts. In particular, we fill focus on retrieving the user/password used and also the IP of the attacker.&lt;/p&gt;
+
+&lt;p&gt;Several tutorials exist to install cowrie. I have maily been inspired by &lt;a href=&quot;https://eval2a.wordpress.com/2017/12/04/honeypot-part-1-setting-up-cowrie-and-dionaea/&quot;&gt;this one&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;before-installing-cowrie&quot;&gt;Before installing cowrie&lt;/h2&gt;
+
+&lt;p&gt;To be a nice system to attack, we have to ensure that our honeypot will listen on port 22. So, as you probably have a ssh server, be sure it is listening on a different port (check /etc/ssh/sshd_config).&lt;/p&gt;
+
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# The strategy used for options in the default sshd_config shipped with
+# OpenSSH is to specify options with their default value where
+# possible, but leave them commented.  Uncommented options override the
+# default value.
+&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;Port&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;10022&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#AddressFamily any
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Some dependencies are required before installing cowrie. Sorry, it uses python2.7 which will be soon &lt;a href=&quot;https://pythonclock.org/&quot;&gt;deprecated&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;git python-virtualenv libssl-dev libffi-dev build-essential libpython-dev python2.7-minimal
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we need to create the &lt;code class=&quot;highlighter-rouge&quot;&gt;cowrie&lt;/code&gt; user. Its home folder will host the logs. However, in my case, I have not so much memory in /home, so I will put everything in another folder, namely /data. So cowries’s home will be at /data/cowrie.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;adduser &lt;span class=&quot;nt&quot;&gt;--home&lt;/span&gt; /data/cowrie &lt;span class=&quot;nt&quot;&gt;--disabled-password&lt;/span&gt; cowrie
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;It may ask you some useless extra informations about the user.&lt;/p&gt;
+
+&lt;h2 id=&quot;getting-sources&quot;&gt;Getting sources&lt;/h2&gt;
+
+&lt;p&gt;Now, let us take the &lt;code class=&quot;highlighter-rouge&quot;&gt;cowrie&lt;/code&gt; identity to download the honeypot files.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su cowrie
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /data/cowrie
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; git clone https://github.com/micheloosterhof/cowrie
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Data are in /data/cowrie/cowrie folder. In this folder, we will create a virtual environment (to avoid to install further python packets on the system).&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;cowrie
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; virtualenv cowrie-env
+&lt;span class=&quot;go&quot;&gt;Running virtualenv with interpreter /usr/bin/python2
+New python executable in /data/cowrie/cowrie/cowrie-env/bin/python2
+Also creating executable in /data/cowrie/cowrie/cowrie-env/bin/python
+Installing setuptools, pkg_resources, pip, wheel...done.
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, we enter in the virtual environment to download some requirements.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;cowrie-env/bin/activate
+&lt;span class=&quot;gp&quot;&gt;(cowrie-env) $&lt;/span&gt; pip &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--upgrade&lt;/span&gt; pip
+&lt;span class=&quot;go&quot;&gt;DEPRECATION: Python 2.7 will reach the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 won't be maintained after that date. A future version of pip will drop support for Python 2.7.
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;(cowrie-env) $&lt;/span&gt; pip &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; requirements.txt &lt;span class=&quot;nt&quot;&gt;--upgrade&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;...
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;(cowrie-env) $&lt;/span&gt; deactivate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;configure&quot;&gt;Configure&lt;/h2&gt;
+&lt;p&gt;Let us recall that we are in the /data/cowrie/cowrie folder. The cowrie config is located in etc/ subfolder. Let us have a look.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;etc/
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cp &lt;/span&gt;cowrie.cfg.dist cowrie.cfg
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Many things can be changed in cowrie.cfg, but we will focus on the most important.&lt;/p&gt;
+
+&lt;h3 id=&quot;listening-port&quot;&gt;Listening port&lt;/h3&gt;
+
+&lt;p&gt;In the cowrie.cfg we have especially the port cowrie will listen.&lt;/p&gt;
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Endpoint to listen on for incoming SSH connections.
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;listen_endpoints&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;tcp:2222:interface=0.0.0.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So cowrie is going to listen on tcp port 2222. This is not very interesting to make our system scanned by bots. Several solutions exist.&lt;/p&gt;
+
+&lt;h4 id=&quot;not-recommended&quot;&gt;Not recommended&lt;/h4&gt;
+&lt;p&gt;Change 2222 to 22 in the config file and run cowrie as root (no, don’t do that).&lt;/p&gt;
+
+&lt;h4 id=&quot;add-bind-capability&quot;&gt;Add bind capability&lt;/h4&gt;
+&lt;p&gt;Change 2222 to 22 in the config file and add bind capabilities to python executable (linux capability &lt;code class=&quot;highlighter-rouge&quot;&gt;CAP_NET_BIND_SERVICE&lt;/code&gt;). As your classical user:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;setcap &lt;span class=&quot;nv&quot;&gt;cap_net_bind_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;+ep /data/cowrie/cowrie/cowrie-env/bin/python2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;authbind&quot;&gt;Authbind&lt;/h4&gt;
+&lt;p&gt;(see &lt;a href=&quot;https://eval2a.wordpress.com/2017/12/04/honeypot-part-1-setting-up-cowrie-and-dionaea/&quot;&gt;here&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h4 id=&quot;iptables&quot;&gt;iptables&lt;/h4&gt;
+&lt;p&gt;Finally, you can redirect the port 22 with iptables. As your classical user:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;iptables &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; nat &lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt; PREROUTING &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; tcp –dport 22 &lt;span class=&quot;nt&quot;&gt;-j&lt;/span&gt; REDIRECT –to-port 2222
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I have tried iptables and capabilites methods. It works well in both cases.&lt;/p&gt;
+
+&lt;h3 id=&quot;accepted-connections&quot;&gt;Accepted connections&lt;/h3&gt;
+&lt;p&gt;Cowrie does just log connection but also event about what the attackers do if he manages to connect. WTF!? Don’t worry, it is a kind of sandbox. Nowadays, you can configure the accepted credentials through the etc/userdb.txt file (copy userdb.example to userdb.txt before). In my case I have not given any access.&lt;/p&gt;
+
+&lt;h2 id=&quot;start-cowrie&quot;&gt;Start cowrie&lt;/h2&gt;
+
+&lt;p&gt;Finally you can start cowrie (the first line is to change the user to cowrie):&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su cowrie
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /data/cowrie/cowrie
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; ./bin/cowrie start
+&lt;span class=&quot;go&quot;&gt;
+Join the Cowrie community at: http://bit.ly/cowrieslack
+
+Using default Python virtual environment &quot;/data/cowrie/cowrie/cowrie-env&quot;
+Starting cowrie: [twistd   --umask=0022 --pidfile=var/run/cowrie.pid --logger cowrie.python.logfile.logger cowrie ]...
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Eventually you can check it works.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; ./bin/cowrie status
+&lt;span class=&quot;go&quot;&gt;cowrie is running (PID: 19133).
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; ss &lt;span class=&quot;nt&quot;&gt;-alt&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 0      50           0.0.0.0:ssh       0.0.0.0:*   
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For the moment you can stop cowrie. We will have a look on some of its options later.&lt;/p&gt;
+
+&lt;h1 id=&quot;mysql&quot;&gt;MySQL&lt;/h1&gt;
+
+&lt;p&gt;We will use MySQL to store the cowrie logs. First we set up a MySQL server and then we configure cowrie to send logs to the database.
+Many of these steps are detailed in /data/cowrie/cowrie/docs/sql/README.rst.&lt;/p&gt;
+
+&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
+&lt;p&gt;First let us download the mysql utilities.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;mysql-server mysql-client mysql-common libmysqlclient-dev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;configuration&quot;&gt;Configuration&lt;/h2&gt;
+
+&lt;p&gt;First you can start the secure installation of mysql. It helps to remove some useless (and insecure) features.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;mysql_secure_installation 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then you can add a cowrie user, a database just for him (and all privilege on it).&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;mysql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USER&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'cowrie'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'localhost'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IDENTIFIED&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'cowrie'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cowrie&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;GRANT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ALL&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIVILEGES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ON&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cowrie&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'cowrie'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'localhost'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FLUSH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIVILEGES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;After you can check that the connection with the cowrie’s account is ok&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; mysql &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; cowrie &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;Enter password: 
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;Welcome to the MySQL monitor.  Commands end with ;&lt;/span&gt; or &lt;span class=&quot;se&quot;&gt;\g&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;...
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;back-to-cowrie&quot;&gt;Back to cowrie&lt;/h2&gt;
+
+&lt;p&gt;Cowrie can send logs to a mysql database. First we have to add a python package (to the virtual environment obviously):&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su cowrie
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /data/cowrie/cowrie
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;cowrie-env/bin/activate
+&lt;span class=&quot;gp&quot;&gt;(cowrie-env) $&lt;/span&gt; pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;mysql-python &lt;span class=&quot;nt&quot;&gt;--upgrade&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, the config file of cowrie (/data/cowrie/cowrie/etc/cowrie.cfg) must be modified as follows (according to your MySQL installation).&lt;/p&gt;
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# MySQL logging module
+# Database structure for this module is supplied in docs/sql/mysql.sql
+# 
+# MySQL logging requires extra software: sudo apt-get install libmysqlclient-dev
+# MySQL logging requires an extra Python module: pip install mysql-python
+# 
+&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;[output_mysql]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;enabled&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true  &lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;host&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;localhost &lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;database&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cowrie&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cowrie&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cowrie&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;3306&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;debug&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;false&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, the database scheme required by cowrie must be loaded in MySQL:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /data/cowrie/cowrie/docs/sql
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; mysql &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; cowrie &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;Enter password: 
+&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;...
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;USE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cowrie&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tables&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;------------------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Tables_in_cowrie&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;------------------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clients&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;downloads&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;input&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keyfingerprints&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sensors&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessions&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ttylog&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;------------------+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EXIT&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;grafana&quot;&gt;Grafana&lt;/h1&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;Some details can be found on the &lt;a href=&quot;https://docs.grafana.org/installation/debian/&quot;&gt;grafana website&lt;/a&gt;. Unfortunately, you cannot use &lt;code class=&quot;highlighter-rouge&quot;&gt;apt&lt;/code&gt; directly to get it, so you have either to download it manually or add their apt repository (see below).&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;nano /etc/apt/sources.list.d/grafana.list
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Add the following line:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-txt&quot;&gt;deb https://packages.grafana.com/oss/deb stable main
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To install singed packages:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; curl https://packages.grafana.com/gpg.key | &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-key add -
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then install it!&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get update
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt-get &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;grafana
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;configuration-https&quot;&gt;Configuration (HTTPS)&lt;/h2&gt;
+
+&lt;p&gt;Before doing fancy visualizations with Grafana, we need to set up a bit of security. Actually, everything is local: cowrie listens on port 22 but this is a sandbox (besides we do not accept any connection in this case) and MySQL is listening on localhost.&lt;/p&gt;
+
+&lt;p&gt;Let us recall that we are headless so Grafana is likely to be our single entry point from the internet. As it has a full HTTP API, we first set up HTTPS, and then we create fancy dashboards.&lt;/p&gt;
+
+&lt;p&gt;Naturally, we will use &lt;a href=&quot;https://certbot.eff.org/lets-encrypt/ubuntubionic-other&quot;&gt;Certbot&lt;/a&gt; to generate SSL certificates. We can add the cerbot ppa on our system so as to install it.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;add-apt-repository ppa:certbot/certbot
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt update
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;certbot 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;With certbot we can easily create a certificate for our DOMAIN_NAME:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;certbot certonly &lt;span class=&quot;nt&quot;&gt;--standalone&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; DOMAIN_NAME
+&lt;span class=&quot;c&quot;&gt;...
+&lt;/span&gt;&lt;span class=&quot;go&quot;&gt;IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/DOMAIN_NAME/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/DOMAIN_NAME/privkey.pem
+   Your cert will expire on 2019-04-28. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot
+   again. To non-interactively renew *all* of your certificates, run
+   &quot;certbot renew&quot;
+&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;...
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We have the materials to make the connection to Grafana encryted. Let us open the configuration file (/etc/grafana/grafana.ini).
+In particular we have to set the protocol to https, the port to 30003, the domain name and the certificate/key files.&lt;/p&gt;
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;[server]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Protocol (http, https, socket)
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;protocol&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# The ip address to bind to, empty will bind to all interfaces
+;http_addr =
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# The http port  to use
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;http_port&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;30003&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# The public facing domain name used to access grafana from a browser
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;domain&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;DOMAIN_NAME&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Redirect to correct domain if host header does not match domain
+# Prevents DNS rebinding attacks
+;enforce_domain = false
+&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# The full public facing url you use in browser, used for redirects and emails
+# If you use reverse proxy and sub path specify full url (with sub path)
+;root_url = http://localhost:3000
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# https certs &amp;amp; key file
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;cert_file&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/etc/letsencrypt/live/DOMAIN_NAME/cert.pem&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;cert_key&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/etc/letsencrypt/live/DOMAIN_NAME/privkey.pem&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you start your server, you may have an error: grafana cannot read your certificate files (cert/key). Actually, only root can read them while the Grafana service (file /usr/lib/systemd/system/grafana-server.service) run as &lt;code class=&quot;highlighter-rouge&quot;&gt;grafana&lt;/code&gt; user (and &lt;code class=&quot;highlighter-rouge&quot;&gt;grafana&lt;/code&gt; group). Two solutions exist (see the following paragraphs)&lt;/p&gt;
+
+&lt;h4 id=&quot;lazy-and-ugly&quot;&gt;Lazy and ugly&lt;/h4&gt;
+&lt;p&gt;You give read + exec access to all for the folders &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/letsencrypt/live&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/letsencrypt/archive&lt;/code&gt; (the most insecure)&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo chmod&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; a+rw /etc/letsencrypt/live
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo chmod&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; a+rw /etc/letsencrypt/archive
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;boring-and-secure&quot;&gt;Boring and secure&lt;/h4&gt;
+&lt;p&gt;You create a specific group for ssl stuff (e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;ssl-users&lt;/code&gt;) and add grafana to it.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;groupadd ssl-users
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;usermod &lt;span class=&quot;nt&quot;&gt;-aG&lt;/span&gt; ssl-users grafana
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo chown&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; root:ssl-users /etc/letsencrypt
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo chmod&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; g+rw /etc/letsencrypt/live
+&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo chmod&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; g+rw /etc/letsencrypt/archive
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;With the second solution, the problem is not solved yet. Actually, the service runs with the group &lt;code class=&quot;highlighter-rouge&quot;&gt;grafana&lt;/code&gt; (and not &lt;code class=&quot;highlighter-rouge&quot;&gt;ssl-users&lt;/code&gt;), so we have to remove it (in /usr/lib/systemd/system/grafana-server.service):&lt;/p&gt;
+
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;[Unit]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Grafana instance&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Documentation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;http://docs.grafana.org&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Wants&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;network-online.target&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;After&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;network-online.target&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;After&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;postgresql.service mariadb.service mysql.service&lt;/span&gt;
+
+&lt;span class=&quot;nn&quot;&gt;[Service]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;EnvironmentFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/etc/default/grafana-server&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;grafana&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#Group=grafana
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;Type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;simple&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;When a service file is changed, we must reload them:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl daemon-reload
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Damned! It creates a new problem: &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/grafana&lt;/code&gt; is owned by root:grafana, so the daemon cannot read the config file… You must change to grafana:grafana:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo chown&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; grafana:grafana /etc/grafana
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;We are done, you can check the status of the service:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;service grafana-server status 
+&lt;span class=&quot;go&quot;&gt;● grafana-server.service - Grafana instance
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;    Loaded: loaded (/usr/lib/systemd/system/grafana-server.service;&lt;/span&gt; disabled vendor preset: enabled&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;    Active: active (running) since Mon 2019-01-28 12:43:54 UTC;&lt;/span&gt; 15min ago
+&lt;span class=&quot;c&quot;&gt;    ...
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;administration&quot;&gt;Administration&lt;/h2&gt;
+&lt;p&gt;Finally! We did it! Let us connect to https://DOMAIN_NAME:30003/:&lt;/p&gt;
+&lt;figure&gt;&lt;img style=&quot;width: 100%; margin-bottom: 1em;&quot; src=&quot;/assets/grafana_welcome.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;Now, you can connect to Grafana. Default credentials are admin/admin, but Grafana ask you to change once logged in, so… DO IT!&lt;/p&gt;
+
+&lt;p&gt;Then, on the main dashboard, Grafana invites us to add a data source. So, let’s do this:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Home dashboard&lt;/th&gt;
+      &lt;th&gt;Data source selection&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;figure&gt;&lt;img style=&quot;width: 100%; margin-bottom: 1em;&quot; src=&quot;/assets/grafana_home.png&quot; /&gt;&lt;/figure&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;figure&gt;&lt;img style=&quot;width: 100%; margin-bottom: 1em;&quot; src=&quot;/assets/grafana_data_source.png&quot; /&gt;&lt;/figure&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Naturally, we select MySQL and we fill the required information:&lt;/p&gt;
+&lt;figure&gt;&lt;img style=&quot;width: 100%; margin-bottom: 1em;&quot; src=&quot;/assets/grafana_mysql.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;After that, we are ready to make a fancy dashboard with fancy panels to visualize what is going on in our cowrie honeypot!&lt;/p&gt;
+
+&lt;h2 id=&quot;first-panels&quot;&gt;First panels&lt;/h2&gt;
+
+&lt;p&gt;Grafana have different built-in panels but you can get more through &lt;a href=&quot;https://grafana.com/plugins&quot;&gt;plugins&lt;/a&gt;. In particular we will use the “carpet-plot”, which will represent the number of ssh connection attempts, every hour, along time. We can download it through:&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;grafana-cli plugins &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;petrslavotinek-carpetplot-panel
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Once the plugin is installed, you must restart Grafana.&lt;/p&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;service grafana-server restart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;last-credentials&quot;&gt;Last credentials&lt;/h3&gt;
+
+&lt;p&gt;One interesting thing is to get the last credentials the attackers used to connect to our honey pot. A simple “Table” panel can do the job.&lt;/p&gt;
+
+&lt;p&gt;To configure the panel, you have to make the right SQL query. Here, this is not so complicated as these information are stored in the &lt;code class=&quot;highlighter-rouge&quot;&gt;auth&lt;/code&gt; table of the &lt;code class=&quot;highlighter-rouge&quot;&gt;cowrie&lt;/code&gt; database. You can either use the query interface or put the raw query (&lt;code class=&quot;highlighter-rouge&quot;&gt;Toggle Edit Mode&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;In my point of view, the interface is better to manage time queries/aggregations. If you want simple output (no time filter), the edit mode is easier. So let us use it:&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;timestamp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;figure&gt;&lt;img style=&quot;width: 100%; margin: 1em 0;&quot; src=&quot;/assets/grafana_panel_cred2.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;Now, you can configure further things like the title or the way to sort the data (descending time order in my case).&lt;/p&gt;
+
+&lt;h3 id=&quot;number-of-unique-ip-addresses&quot;&gt;Number of unique IP addresses&lt;/h3&gt;
+
+&lt;p&gt;The first panel is greedy, meaning that it has printed all the credentials since the beginning. However, Grafana is designed to work on sliding window. Here, we answer the following question: “How many distinct IP addresses have attempted to connect for the last &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; days?”, where &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; is a parameter you can tune on the top-right corner of the dashboard.&lt;/p&gt;
+
+&lt;p&gt;For that purpose, let us add a new “Singlestat” panel, designed to print a relevant value.&lt;/p&gt;
+&lt;figure&gt;&lt;img style=&quot;width: 100%; margin-bottom: 1em;&quot; src=&quot;/assets/grafana_panel_distinct_ip.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;IP are stored in the &lt;code class=&quot;highlighter-rouge&quot;&gt;sessions&lt;/code&gt; table.
+Here, we have to count the distinct IP but only for the last &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; days. This filter is easily available through &lt;code class=&quot;highlighter-rouge&quot;&gt;$__timeFilter&lt;/code&gt;. The whole command is then:&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COUNT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;DISTINCT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessions&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__timeFilter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;attacking-periods&quot;&gt;Attacking periods&lt;/h3&gt;
+
+&lt;p&gt;What time are we under attack? To go further in our threat intelligence experiment, we are going to use the “carpet plot” we downloaded previously.&lt;/p&gt;
+
+&lt;p&gt;Here, the query interface seems easier to use, especially if (like me) you are not mastering SQL.&lt;/p&gt;
+&lt;figure&gt;&lt;img style=&quot;width: 100%; margin-bottom: 1em;&quot; src=&quot;/assets/grafana_panel_carpet3.png&quot; /&gt;&lt;/figure&gt;
+
+&lt;p&gt;Naturally, you can change the title, the color palette etc. Grafana and its plugins are pretty good for customization.&lt;/p&gt;
+
+&lt;h3 id=&quot;i-want-the-world-map&quot;&gt;I want the world map!&lt;/h3&gt;
+
+&lt;p&gt;Obsiously, we want the map. Unfortunately, the Grafana plugin is not so easy to use with our information. I will do my best to find 
+a simple solution to do it from our setup.&lt;/p&gt;</content><author><name></name></author><summary type="html">We all dream of this world map with cyber attacks between countries like this one or the one of Kaspersky. In this post, we will try to do threat intelligence at our modest level. We will consider a basic system open on the Internet, in the grip of cyber-attackers. In this context, we will collect attacks information so as to make a fancy dashboard to visualize what is going on.</summary></entry><entry><title type="html">Distribute your work with Git and Launchpad</title><link href="http://localhost:4000/posts/git-launchpad" rel="alternate" type="text/html" title="Distribute your work with Git and Launchpad" /><published>2018-08-07T00:00:00+02:00</published><updated>2018-08-07T00:00:00+02:00</updated><id>http://localhost:4000/posts/distribute-with-git-and-launchpad</id><content type="html" xml:base="http://localhost:4000/posts/git-launchpad">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
 
 &lt;p&gt;Let us consider you have developped a nice tool (or a nice library). You make it work on your laptop but, more than that, you put all your code on &lt;a href=&quot;https://github.com/&quot;&gt;GitHub&lt;/a&gt; of &lt;a href=&quot;https://about.gitlab.com/&quot;&gt;GitLab&lt;/a&gt;, for instance. As you are smart, you made a useful &lt;code class=&quot;highlighter-rouge&quot;&gt;Makefile&lt;/code&gt; so as to help others to use your work through the famous process:&lt;/p&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://remote.site/mytool.git
@@ -7,7 +458,7 @@ make
 make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;However, it looks a bit handmade: of course, you don’t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone. Moreover, for all the linux users which can use yor work, this is not handled by their package manager: just think about the uninstall or update process …&lt;/p&gt;
+&lt;p&gt;However, it looks a bit handmade: of course, you don’t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone. Moreover, for all the linux users which can use your work, this is not handled by their package manager: just think about the uninstall or update process …&lt;/p&gt;
 
 &lt;p&gt;Obviously, many ways exist to solve these drawbacks. Here we want to explain how you can distribute your work through debian packages and make it available for ubuntu user with a personal package archive (you know the &lt;code class=&quot;highlighter-rouge&quot;&gt;ppa:/...&lt;/code&gt; you can add to your &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/apt/sources.list&lt;/code&gt;).&lt;/p&gt;
 
@@ -114,7 +565,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, libxxx
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git add debian/
 git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Towards a debian package&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Then we use &lt;code class=&quot;highlighter-rouge&quot;&gt;gbp&lt;/code&gt; to create the debian package. In &lt;code class=&quot;highlighter-rouge&quot;&gt;mytool/&lt;/code&gt; folder:&lt;/p&gt;
+&lt;p&gt;Then we use &lt;code class=&quot;highlighter-rouge&quot;&gt;gbp&lt;/code&gt; command (from the &lt;code class=&quot;highlighter-rouge&quot;&gt;git-buildpackage&lt;/code&gt; package) to create the debian package. In &lt;code class=&quot;highlighter-rouge&quot;&gt;mytool/&lt;/code&gt; folder:&lt;/p&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gbp buildpackage &lt;span class=&quot;nt&quot;&gt;--git-ignore-new&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;git-ignore-new&lt;/code&gt; options means that we want to build the package even if some changes have not been commited.
@@ -174,7 +625,7 @@ lp:~USER/+git/mytool 	Development 	... 	        ...
 
 &lt;p&gt;You can click on it and then “Create packaging recipe”. You have to fill some basic information. A noticable thing is the &lt;strong&gt;Default distribution series&lt;/strong&gt;: they are the Ubuntu versions for which the package will be built.&lt;/p&gt;
 
-&lt;p&gt;Moreover, the text of the recipe can be customized. In particular, you can change the debian versioning scheme. A common pattern is the following: &lt;code class=&quot;highlighter-rouge&quot;&gt;{debupstream}-0~{revno}&lt;/code&gt; where &lt;code class=&quot;highlighter-rouge&quot;&gt;debupstream&lt;/code&gt; is the classical version (i.e. &lt;code class=&quot;highlighter-rouge&quot;&gt;1.0&lt;/code&gt; is our case) and &lt;code class=&quot;highlighter-rouge&quot;&gt;revno&lt;/code&gt; is a counter incremented at each change.&lt;/p&gt;
+&lt;p&gt;Moreover, the text of the recipe can be customized. In particular, you can change the debian versioning scheme. A common pattern is the following: &lt;code class=&quot;highlighter-rouge&quot;&gt;{debupstream}~{revno}&lt;/code&gt; where &lt;code class=&quot;highlighter-rouge&quot;&gt;debupstream&lt;/code&gt; is the classical version (i.e. &lt;code class=&quot;highlighter-rouge&quot;&gt;1.0&lt;/code&gt; is our case) and &lt;code class=&quot;highlighter-rouge&quot;&gt;revno&lt;/code&gt; is a counter incremented at each change.&lt;/p&gt;
 
 &lt;p&gt;Actually, all the parameters of the recipe can be changed afterwards.&lt;/p&gt;
 
@@ -190,6 +641,73 @@ lp:~USER/+git/mytool 	Development 	... 	        ...
 &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;mytool
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;step-3-workflow-with-github&quot;&gt;Step 3: Workflow with GitHub&lt;/h1&gt;
+&lt;h1 id=&quot;step-3-workflow&quot;&gt;Step 3: Workflow&lt;/h1&gt;
 
-&lt;p&gt;Ok, we have a local git repo and two remote ones (GitHub+Launchpad for example). Builds are made on Launchpad (and are available through yout ppa), but your releases can also be hosted on GitHub.&lt;/p&gt;</content><author><name></name></author><summary type="html">Introduction</summary></entry></feed>
+&lt;p&gt;Ok, we have a local git repo and two remote ones (GitHub+Launchpad for example). Builds are made on Launchpad (and are available through yout ppa), but your releases can also be hosted on GitHub.&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-a-new-version&quot;&gt;Creating a new version&lt;/h2&gt;
+
+&lt;p&gt;You have your local source code and you make it directly available on your Github repo or through a debian package from your ppa.&lt;/p&gt;
+
+&lt;p&gt;Everytime you push to launchpad, it increments the revision number. So initially, launchpad builds &lt;code class=&quot;highlighter-rouge&quot;&gt;mytool_1.0-1&lt;/code&gt; (with the scheme &lt;code class=&quot;highlighter-rouge&quot;&gt;{debupstream}~{revno}&lt;/code&gt;) and then it will build &lt;code class=&quot;highlighter-rouge&quot;&gt;mytool_1.0-2&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;mytool_1.0-3&lt;/code&gt; (at the second and third push) etc.&lt;/p&gt;
+
+&lt;p&gt;This is very nice because the user could receive these updates through its package manager.
+However, you can make many minor commits (not deserving a new version) although sometimes you naturally commit some very huge and useful changes, putting your tool at higher level. At this moment, you want to make a new version!&lt;/p&gt;
+
+&lt;p&gt;Once again, we use &lt;code class=&quot;highlighter-rouge&quot;&gt;gbp&lt;/code&gt;. In particular, the command &lt;code class=&quot;highlighter-rouge&quot;&gt;dch&lt;/code&gt; generates Debian changelog entries from git commit messages. It means that all your commits (not registered in the previous version) will be written in the &lt;code class=&quot;highlighter-rouge&quot;&gt;debian/changelog&lt;/code&gt; (this file also embeds the upstream version of your tool).&lt;/p&gt;
+
+&lt;p&gt;With the following command, you create a new version of your tool (1.1). It prompts you the changelog file on your favorite terminal text editor. So you can edit and verify all the details.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gbp dch --new-version 1.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If your work is quite stable you can add the &lt;code class=&quot;highlighter-rouge&quot;&gt;--release&lt;/code&gt; option to mark it as a release.
+You can also commit the changelog by adding the &lt;code class=&quot;highlighter-rouge&quot;&gt;--commit&lt;/code&gt; option (the default message will be “Update changelog for %(version)s release”).&lt;/p&gt;
+
+&lt;h2 id=&quot;working-with-github-releases&quot;&gt;Working with GitHub releases&lt;/h2&gt;
+
+&lt;p&gt;You probably know that GitHub can manage releases through tags. When you create a new version, the idea would be to create the git tag in the same time so as to create a new package in the launchpad side and a new release on the GitHub side. And you can also upload the .deb packages created on launchpad to the GitHub release (as “release assets”).&lt;/p&gt;
+
+&lt;p&gt;The process is the following: add your new code to git, create the new version, commit, tag and push!&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# add your changes
+git add -u
+# create the new version and commit everything
+git dch --new-version X.X --commit
+# tag the commit (its name will be &quot;debian/X.X&quot;)
+gbp buildpackage --git-tag-only
+# push the tag
+git push origin --tags
+git push launchpad --tags
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Instead of using &lt;code class=&quot;highlighter-rouge&quot;&gt;gbp&lt;/code&gt;, the tag can be done manually. The equivalent is:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag -a debian/X.X -m &quot;Update changelog for X.X release&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When you push the tag, you can also precise the tag you want to push (the command &lt;code class=&quot;highlighter-rouge&quot;&gt;--tags&lt;/code&gt; push all the tags) through:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git push origin debian/X.X
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Warning: if you push normally on launchpad, a new package is naturally built. If after that you push the tag, some build/upload problems can occur because the revision number did not change (so it cannot replace the previous package with a new package with the same version).&lt;/p&gt;
+
+&lt;h2 id=&quot;final-workflow&quot;&gt;Final workflow&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# you have written new code ...
+# you can check locally if your package builds correctly
+gbp buildpackage
+
+# if everything is ok, you can add your changes
+git add -u
+
+# if you want to create a new version...
+# update the changelog (the --commit option will also commit the changes previously added)
+git dch --new-version X.X --commit
+# create the corresponding tag (its name will be &quot;debian/X.X&quot;)
+gbp buildpackage --git-tag-only
+# then push
+git push origin --tags
+git push launchpad --tags
+
+# otherwise
+git commit -m &quot;your minor changes&quot;
+git push origin master
+git push launchpad master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">Introduction</summary></entry></feed>
