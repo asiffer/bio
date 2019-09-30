@@ -18,6 +18,7 @@ We will use Cowrie to draw attackers' attention (ssh honeypot), MySQL to store t
         - [Listening port](#listening-port)
         - [Accepted connections](#accepted-connections)
     - [Start cowrie](#start-cowrie)
+    - [CAAS: Cowrie As A Service](#caas:-cowrie-as-a-service)
 - [MySQL](#mysql)
     - [Requirements](#requirements)
     - [Configuration](#configuration)
@@ -172,6 +173,43 @@ LISTEN 0      50           0.0.0.0:ssh       0.0.0.0:*
 ```
 
 For the moment you can stop cowrie. We will have a look on some of its options later.
+
+## CAAS: Cowrie As A Service
+
+To my mind, managing cowrie is not user-friendly enough. We have to log as the `cowrie` user and launch `/data/cowrie/cowrie/bin/cowrie start`. Why not using a systemd service file? Let us create the file `cowrie.service` in the folder `/usr/lib/systemd/system/`.
+
+```ini
+[Unit]
+Description=COWRIE: the famous ssh honeypot!
+Requires=mysql.service
+
+[Service]
+User=cowrie
+ExecStart=/data/cowrie/cowrie/bin/cowrie start
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Now we just have to do:
+```shell
+$ sudo systemctl daemon-reaload
+$ sudo systemctl start cowrie
+```
+If you check the service (`sudo systemctl status cowrie`), it is actually idle... Why? The file `/data/cowrie/cowrie/bin/cowrie` is in fact a shell script which manage and daemonize the real underlying program. To solve the problem, we need to change a variable at the beginning of the file:
+```ini
+...
+DAEMONIZE="-n"
+...
+```
+
+Now you can start your service (even enable it at boot time)
+```shell
+$ sudo systemctl start cowrie
+$ sudo systemctl enable cowrie
+```
+
 
 # MySQL
 
@@ -477,3 +515,11 @@ Naturally, you can change the title, the color palette etc. Grafana and its plug
 
 Obsiously, we want the map. Unfortunately, the Grafana plugin is not so easy to use with our information. I will do my best to find 
 a simple solution to do it from our setup.
+
+## Worldmap!
+
+First you need to get a geo-ip database. Some free sources exist but in this tutorial we will use those of [db-ip.com](https://db-ip.com/db/lite.php). You can either choose IP-to-City or IP-to-Country database.
+
+First you need to download the csv. 
+
+On the website 

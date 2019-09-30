@@ -9,9 +9,10 @@ permalink: /
 
 I am a Ph.D. student under the supervision of Pierre-Alain Fouque and Alexandre Termier. I am a member of both <a href="https://www.irisa.fr/emsec/">EMSEC</a> Team and <a href="https://team.inria.fr/lacodam/">LACODAM</a> Team at IRISA/Inria Lab in Rennes (Brittany, France).
 
-My Ph.D. is funded by <a href="https://www.amossys.fr/">Amossys</a> which is a pure player cyber-security company in Rennes.
+My Ph.D. is funded by <a href="https://www.amossys.fr/">Amossys</a> which is a small cyber-security company in Rennes.
 
 My thesis deals with **cyber-attacks detection with statistical learning methods**. The idea is to bridge from AI to cyber-security (I apologize for these run-of-the-mill keywords).
+Actually, I have rather developed generic algorithms which may then be used in cyber-security.
 
 
 <figure><img src="/assets/ml.svg"></figure>

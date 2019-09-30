@@ -69,6 +69,7 @@
         </ul>
       </li>
       <li><a href="#start-cowrie">Start cowrie</a></li>
+      <li><a href="#caas:-cowrie-as-a-service">CAAS: Cowrie As A Service</a></li>
     </ul>
   </li>
   <li><a href="#mysql">MySQL</a>
@@ -217,6 +218,38 @@ LISTEN 0      50           0.0.0.0:ssh       0.0.0.0:*
 </span></code></pre></div></div>
 
 <p>For the moment you can stop cowrie. We will have a look on some of its options later.</p>
+
+<h2 id="caas-cowrie-as-a-service">CAAS: Cowrie As A Service</h2>
+
+<p>To my mind, managing cowrie is not user-friendly enough. We have to log as the <code class="highlighter-rouge">cowrie</code> user and launch <code class="highlighter-rouge">/data/cowrie/cowrie/bin/cowrie start</code>. Why not using a systemd service file? Let us create the file <code class="highlighter-rouge">cowrie.service</code> in the folder <code class="highlighter-rouge">/usr/lib/systemd/system/</code>.</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
+<span class="py">Description</span><span class="p">=</span><span class="s">COWRIE: the famous ssh honeypot!</span>
+<span class="py">Requires</span><span class="p">=</span><span class="s">mysql.service</span>
+
+<span class="nn">[Service]</span>
+<span class="py">User</span><span class="p">=</span><span class="s">cowrie</span>
+<span class="py">ExecStart</span><span class="p">=</span><span class="s">/data/cowrie/cowrie/bin/cowrie start</span>
+<span class="py">Restart</span><span class="p">=</span><span class="s">on-failure</span>
+
+<span class="nn">[Install]</span>
+<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+</code></pre></div></div>
+
+<p>Now we just have to do:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl daemon-reaload
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl start cowrie
+</code></pre></div></div>
+<p>If you check the service (<code class="highlighter-rouge">sudo systemctl status cowrie</code>), it is actually idle… Why? The file <code class="highlighter-rouge">/data/cowrie/cowrie/bin/cowrie</code> is in fact a shell script which manage and daemonize the real underlying program. To solve the problem, we need to change a variable at the beginning of the file:</p>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">...</span>
+<span class="py">DAEMONIZE</span><span class="p">=</span><span class="s">"-n"</span>
+<span class="err">...</span>
+</code></pre></div></div>
+
+<p>Now you can start your service (even enable it at boot time)</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl start cowrie
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl <span class="nb">enable </span>cowrie
+</code></pre></div></div>
 
 <h1 id="mysql">MySQL</h1>
 
@@ -502,6 +535,14 @@ Here, we have to count the distinct IP but only for the last <code class="highli
 
 <p>Obsiously, we want the map. Unfortunately, the Grafana plugin is not so easy to use with our information. I will do my best to find 
 a simple solution to do it from our setup.</p>
+
+<h2 id="worldmap">Worldmap!</h2>
+
+<p>First you need to get a geo-ip database. Some free sources exist but in this tutorial we will use those of <a href="https://db-ip.com/db/lite.php">db-ip.com</a>. You can either choose IP-to-City or IP-to-Country database.</p>
+
+<p>First you need to download the csv.</p>
+
+<p>On the website</p>
 
 			</div>
 		</content>	

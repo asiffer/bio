@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-02-01T15:04:19+01:00</updated><id>http://localhost:4000/</id><title type="html">Alban Siffer</title><subtitle>This is my personal webpage</subtitle><entry><title type="html">Fancy Threat Intel’ with Cowrie/MySQL/Grafana stack</title><link href="http://localhost:4000/posts/cowrie" rel="alternate" type="text/html" title="Fancy Threat Intel' with Cowrie/MySQL/Grafana stack" /><published>2019-01-25T00:00:00+01:00</published><updated>2019-01-25T00:00:00+01:00</updated><id>http://localhost:4000/posts/fancy-threat_intel</id><content type="html" xml:base="http://localhost:4000/posts/cowrie">&lt;p&gt;We all dream of this world map with cyber attacks between countries like this one or the one of &lt;a href=&quot;https://cybermap.kaspersky.com/&quot;&gt;Kaspersky&lt;/a&gt;. In this post, we will try to do threat intelligence at our modest level. We will consider a basic system open on the Internet, in the grip of cyber-attackers. In this context, we will collect attacks information so as to make a fancy dashboard to visualize what is going on.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-30T11:11:53+02:00</updated><id>http://localhost:4000/</id><title type="html">Alban Siffer</title><subtitle>This is my personal webpage</subtitle><entry><title type="html">Fancy Threat Intel’ with Cowrie/MySQL/Grafana stack</title><link href="http://localhost:4000/posts/cowrie" rel="alternate" type="text/html" title="Fancy Threat Intel' with Cowrie/MySQL/Grafana stack" /><published>2019-01-25T00:00:00+01:00</published><updated>2019-01-25T00:00:00+01:00</updated><id>http://localhost:4000/posts/fancy-threat_intel</id><content type="html" xml:base="http://localhost:4000/posts/cowrie">&lt;p&gt;We all dream of this world map with cyber attacks between countries like this one or the one of &lt;a href=&quot;https://cybermap.kaspersky.com/&quot;&gt;Kaspersky&lt;/a&gt;. In this post, we will try to do threat intelligence at our modest level. We will consider a basic system open on the Internet, in the grip of cyber-attackers. In this context, we will collect attacks information so as to make a fancy dashboard to visualize what is going on.&lt;/p&gt;
 
 &lt;p&gt;We will use Cowrie to draw attackers’ attention (ssh honeypot), MySQL to store the collected data and Grafana to build a dashboard.&lt;/p&gt;
 
@@ -17,6 +17,7 @@
         &lt;/ul&gt;
       &lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#start-cowrie&quot;&gt;Start cowrie&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#caas:-cowrie-as-a-service&quot;&gt;CAAS: Cowrie As A Service&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#mysql&quot;&gt;MySQL&lt;/a&gt;
@@ -165,6 +166,38 @@ LISTEN 0      50           0.0.0.0:ssh       0.0.0.0:*
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;For the moment you can stop cowrie. We will have a look on some of its options later.&lt;/p&gt;
+
+&lt;h2 id=&quot;caas-cowrie-as-a-service&quot;&gt;CAAS: Cowrie As A Service&lt;/h2&gt;
+
+&lt;p&gt;To my mind, managing cowrie is not user-friendly enough. We have to log as the &lt;code class=&quot;highlighter-rouge&quot;&gt;cowrie&lt;/code&gt; user and launch &lt;code class=&quot;highlighter-rouge&quot;&gt;/data/cowrie/cowrie/bin/cowrie start&lt;/code&gt;. Why not using a systemd service file? Let us create the file &lt;code class=&quot;highlighter-rouge&quot;&gt;cowrie.service&lt;/code&gt; in the folder &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/lib/systemd/system/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;[Unit]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;COWRIE: the famous ssh honeypot!&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Requires&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;mysql.service&lt;/span&gt;
+
+&lt;span class=&quot;nn&quot;&gt;[Service]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;cowrie&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;ExecStart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/data/cowrie/cowrie/bin/cowrie start&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;Restart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;on-failure&lt;/span&gt;
+
+&lt;span class=&quot;nn&quot;&gt;[Install]&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;WantedBy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;multi-user.target&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we just have to do:&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl daemon-reaload
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl start cowrie
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If you check the service (&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo systemctl status cowrie&lt;/code&gt;), it is actually idle… Why? The file &lt;code class=&quot;highlighter-rouge&quot;&gt;/data/cowrie/cowrie/bin/cowrie&lt;/code&gt; is in fact a shell script which manage and daemonize the real underlying program. To solve the problem, we need to change a variable at the beginning of the file:&lt;/p&gt;
+&lt;div class=&quot;language-ini highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;DAEMONIZE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;-n&quot;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now you can start your service (even enable it at boot time)&lt;/p&gt;
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl start cowrie
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;cowrie
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;mysql&quot;&gt;MySQL&lt;/h1&gt;
 
@@ -449,7 +482,15 @@ Here, we have to count the distinct IP but only for the last &lt;code class=&quo
 &lt;h3 id=&quot;i-want-the-world-map&quot;&gt;I want the world map!&lt;/h3&gt;
 
 &lt;p&gt;Obsiously, we want the map. Unfortunately, the Grafana plugin is not so easy to use with our information. I will do my best to find 
-a simple solution to do it from our setup.&lt;/p&gt;</content><author><name></name></author><summary type="html">We all dream of this world map with cyber attacks between countries like this one or the one of Kaspersky. In this post, we will try to do threat intelligence at our modest level. We will consider a basic system open on the Internet, in the grip of cyber-attackers. In this context, we will collect attacks information so as to make a fancy dashboard to visualize what is going on.</summary></entry><entry><title type="html">Distribute your work with Git and Launchpad</title><link href="http://localhost:4000/posts/git-launchpad" rel="alternate" type="text/html" title="Distribute your work with Git and Launchpad" /><published>2018-08-07T00:00:00+02:00</published><updated>2018-08-07T00:00:00+02:00</updated><id>http://localhost:4000/posts/distribute-with-git-and-launchpad</id><content type="html" xml:base="http://localhost:4000/posts/git-launchpad">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
+a simple solution to do it from our setup.&lt;/p&gt;
+
+&lt;h2 id=&quot;worldmap&quot;&gt;Worldmap!&lt;/h2&gt;
+
+&lt;p&gt;First you need to get a geo-ip database. Some free sources exist but in this tutorial we will use those of &lt;a href=&quot;https://db-ip.com/db/lite.php&quot;&gt;db-ip.com&lt;/a&gt;. You can either choose IP-to-City or IP-to-Country database.&lt;/p&gt;
+
+&lt;p&gt;First you need to download the csv.&lt;/p&gt;
+
+&lt;p&gt;On the website&lt;/p&gt;</content><author><name></name></author><summary type="html">We all dream of this world map with cyber attacks between countries like this one or the one of Kaspersky. In this post, we will try to do threat intelligence at our modest level. We will consider a basic system open on the Internet, in the grip of cyber-attackers. In this context, we will collect attacks information so as to make a fancy dashboard to visualize what is going on.</summary></entry><entry><title type="html">Distribute your work with Git and Launchpad</title><link href="http://localhost:4000/posts/git-launchpad" rel="alternate" type="text/html" title="Distribute your work with Git and Launchpad" /><published>2018-08-07T00:00:00+02:00</published><updated>2018-08-07T00:00:00+02:00</updated><id>http://localhost:4000/posts/distribute-with-git-and-launchpad</id><content type="html" xml:base="http://localhost:4000/posts/git-launchpad">&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
 
 &lt;p&gt;Let us consider you have developped a nice tool (or a nice library). You make it work on your laptop but, more than that, you put all your code on &lt;a href=&quot;https://github.com/&quot;&gt;GitHub&lt;/a&gt; of &lt;a href=&quot;https://about.gitlab.com/&quot;&gt;GitLab&lt;/a&gt;, for instance. As you are smart, you made a useful &lt;code class=&quot;highlighter-rouge&quot;&gt;Makefile&lt;/code&gt; so as to help others to use your work through the famous process:&lt;/p&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://remote.site/mytool.git
