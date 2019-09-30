@@ -46,9 +46,9 @@ We will first install Cowrie, then MySQL and finally Grafana. Cowrie is a honeyp
 
 # Cowrie
 
-[Cowrie](https://github.com/cowrie/cowrie) is a common ssh honeypot aimed to log connection attempts. In particular, we fill focus on retrieving the user/password used and also the IP of the attacker.
+[Cowrie](https://github.com/cowrie/cowrie) is a common ssh honeypot aimed to log connection attempts. In particular, we will focus on retrieving the user/password used and also the IP of the attacker.
 
-Several tutorials exist to install cowrie. I have maily been inspired by [this one](https://eval2a.wordpress.com/2017/12/04/honeypot-part-1-setting-up-cowrie-and-dionaea/).
+Several tutorials exist to install cowrie. I have mainly been inspired by [this one](https://eval2a.wordpress.com/2017/12/04/honeypot-part-1-setting-up-cowrie-and-dionaea/).
 
 ## Before installing cowrie
 
@@ -73,11 +73,11 @@ Some dependencies are required before installing cowrie. Sorry, it uses python2.
 $ sudo apt install git python-virtualenv libssl-dev libffi-dev build-essential libpython-dev python2.7-minimal
 ```
 
-Finally, we need to create the `cowrie` user. Its home folder will host the logs. However, in my case, I have not so much memory in /home, so I will put everything in another folder, namely /data. So cowries's home will be at /data/cowrie.
+Finally, we need to create the `cowrie` user. Its home folder will host the logs. However, in my case, I have not so much memory in /home, so I will put everything in another folder, namely /data. So cowrie's home will be at /data/cowrie.
 ```console
 $ sudo adduser --home /data/cowrie --disabled-password cowrie
 ``` 
-It may ask you some useless extra informations about the user. 
+It may ask you some useless extra information about the user. 
 
 ## Getting sources
 
@@ -88,7 +88,7 @@ $ cd /data/cowrie
 $ git clone https://github.com/micheloosterhof/cowrie
 ```
 
-Data are in /data/cowrie/cowrie folder. In this folder, we will create a virtual environment (to avoid to install further python packets on the system).
+Data are in /data/cowrie/cowrie folder. In this folder, we will create a virtual environment (to avoid installing further python packets on the system).
 ```console
 $ cd cowrie
 $ virtualenv cowrie-env
