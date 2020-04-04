@@ -4,8 +4,11 @@ title: Bio
 permalink: /bio/
 ---
 
-## Before the beginning of my thesis
+## Short bio
 
+**2020-** R&D Engineer at Amossys
+
+**2016-2019** PhD Thesis - *New Statistical Methods for Data Mining*
 
 **2014-2015** Math teacher in high school
 
