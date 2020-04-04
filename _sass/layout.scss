@@ -142,23 +142,34 @@ footer {
 	height: 5em;
 }
 
-.highlight  { 
-	padding: 0.25em;
-	padding-left: 1em;
-	padding-right: 1em;
-	border-radius: 0.5em; 
-	background: $color1; 
-	white-space: pre-wrap;
+.note {
+	display: block;
+	float: left;
+	width: 100%;
+	background-color: #EEEEEE;
+	margin: 0em 0 1em 0;
 }
 
-.highlight code {
-	font-family: $font8;
-	color: $color2;
+.note-title {
+	display: block;
+	float: left;
+	width: 100%;
+	padding-left: 0.5em;
+	padding-top: 0.5em;
+	padding-bottom: 0.3em;
+	color: $color0;
+	background-color: $color-bluesky;
+	font-weight: bold;
+	code {
+		color: $color-oceanic;
+	}
 }
 
-code {
-	font-family: $font8;
-	color: $color3;
+.note-text {
+	display: block;
+	float: left;
+	width: 100%;
+	padding: 0.5em 0.5em;
 }
 
 @media screen and (max-width: 1200px) {

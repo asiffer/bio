@@ -1,8 +1,138 @@
+.highlight code {
+	font-family: $font8;
+	color: $color2;
+}
 
-.language-console.highlighter-rouge {
+code {
+	font-family: $font8;
+	color: $color3;
+}
+
+.highlight  { 
+	padding: 0.2em;
+	padding-left: 0.5em;
+    padding-right: 0.5em;
+    border: thin solid $color-onyx;
+	border-radius: 0.5em; 
+	background: $color0; 
+    white-space: pre-wrap;
     
+}
+
+pre.highlight {
+    border: none;
+}
+
+
+
+
+// .language-bash.highlighter-rouge {
+
+// }
+
+
+// .language-ini.highlighter-rouge {
+//     pre code {
+//         background-color: $color0;
+//         color: $color0;
+//         .nn {
+//             color: $color-mustard;
+//         }
+//         .c {
+//             color: $color-greenery;
+//         }
+//         .s {
+//             color: $color-bluesky;
+//         }
+//     }
+// }
+
+
+// .language-sql.highlighter-rouge {
+//     pre code {
+//         // background-color: $color0;
+//         color: $color0;
+//         .n, .o {
+//             color: $color-granite;
+//         }
+//         .k {
+//             color: $color-firework;
+//         }
+//     }
+// }
+
+
+// .language-c.highlighter-rouge {
+//     .highlight {
+//         background: $color0;
+//         // border-width: 5pt;
+//         border: thin solid $color-onyx;
+//         // border-color: $color-onyx;
+//     }
+//     pre.highlight {
+//         background: $color0;
+//         border: none;
+//     }
+//     pre code {
+//         // background-color: $color0;
+//         color: $color-onyx;
+//         .nn {
+//             color: $color-mustard;
+//         }
+//         .mi {
+//             color: $color-granite;
+//         }
+//         .c1 {
+//             color: $color-greenery;
+//         }
+//         .cp {
+//             color: $color-firework;
+//         }
+//         .s, .se {
+//             color: $color-bluesky;
+//         }
+//         .k, .kt {
+//             color: $color-mustard;
+//         }
+//     }
+// }
+
+
+
+.highlight pre code {
+    // background-color: $color0;
+    color: $color-onyx;
+    .nn {
+        color: $color-mustard;
+    }
+    .mi {
+        color: $color-granite;
+    }
+    .c1, .c {
+        color: $color-greenery;
+    }
+    .cp {
+        color: $color-firework;
+    }
+    .s, .se {
+        color: $color-bluesky;
+    }
+    .k, .kt {
+        color: $color-mustard;
+    }
+}
+
+
+
+.language-bash.highlighter-rouge {
+    .highlight {
+        background-color: $color1;
+    }
     pre code {
-        // background-color: $color0;
+        // .nv if the dollar $
+        .nv, .o {
+            color: $color-granite;
+        }
         color: $color0;
         /*.o {
             color: $color-myw-3;
@@ -18,38 +148,6 @@
         }
         .c {
             color: $color-cerulean;
-        }
-    }
-}
-
-
-
-.language-ini.highlighter-rouge {
-    pre code {
-        // background-color: $color0;
-        color: $color0;
-        .nn {
-            color: $color-mustard;
-        }
-        .c {
-            color: $color-greenery;
-        }
-        .s {
-            color: $color-bluesky;
-        }
-    }
-}
-
-
-.language-sql.highlighter-rouge {
-    pre code {
-        // background-color: $color0;
-        color: $color0;
-        .n, .o {
-            color: $color-granite;
-        }
-        .k {
-            color: $color-firework;
         }
     }
 }

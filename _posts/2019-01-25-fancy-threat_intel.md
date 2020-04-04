@@ -69,12 +69,12 @@ Port 10022
 ```
 
 Some dependencies are required before installing cowrie. Sorry, it uses python2.7 which will be soon [deprecated](https://pythonclock.org/).
-```console
+```bash
 $ sudo apt install git python-virtualenv libssl-dev libffi-dev build-essential libpython-dev python2.7-minimal
 ```
 
 Finally, we need to create the `cowrie` user. Its home folder will host the logs. However, in my case, I have not so much memory in /home, so I will put everything in another folder, namely /data. So cowrie's home will be at /data/cowrie.
-```console
+```bash
 $ sudo adduser --home /data/cowrie --disabled-password cowrie
 ``` 
 It may ask you some useless extra information about the user. 
@@ -82,14 +82,14 @@ It may ask you some useless extra information about the user.
 ## Getting sources
 
 Now, let us take the `cowrie` identity to download the honeypot files.
-```console
+```bash
 $ sudo su cowrie
 $ cd /data/cowrie
 $ git clone https://github.com/micheloosterhof/cowrie
 ```
 
 Data are in /data/cowrie/cowrie folder. In this folder, we will create a virtual environment (to avoid installing further python packets on the system).
-```console
+```bash
 $ cd cowrie
 $ virtualenv cowrie-env
 Running virtualenv with interpreter /usr/bin/python2
@@ -99,7 +99,7 @@ Installing setuptools, pkg_resources, pip, wheel...done.
 ```
 
 Then, we enter in the virtual environment to download some requirements.
-```console
+```bash
 $ source cowrie-env/bin/activate
 (cowrie-env) $ pip install --upgrade pip
 DEPRECATION: Python 2.7 will reach the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 won't be maintained after that date. A future version of pip will drop support for Python 2.7.
@@ -110,7 +110,7 @@ DEPRECATION: Python 2.7 will reach the end of its life on January 1st, 2020. Ple
 
 ## Configure
 Let us recall that we are in the /data/cowrie/cowrie folder. The cowrie config is located in etc/ subfolder. Let us have a look.
-```console
+```bash
 $ cd etc/
 $ cp cowrie.cfg.dist cowrie.cfg
 ```
@@ -131,7 +131,7 @@ Change 2222 to 22 in the config file and run cowrie as root (no, don't do that).
 
 #### Add bind capability
 Change 2222 to 22 in the config file and add bind capabilities to python executable (linux capability `CAP_NET_BIND_SERVICE`). As your classical user:
-```console
+```bash
 $ sudo setcap cap_net_bind_service=+ep /data/cowrie/cowrie/cowrie-env/bin/python2
 ```
 
@@ -140,7 +140,7 @@ $ sudo setcap cap_net_bind_service=+ep /data/cowrie/cowrie/cowrie-env/bin/python
 
 #### iptables
 Finally, you can redirect the port 22 with iptables. As your classical user:
-```console
+```bash
 $ sudo iptables -t nat -A PREROUTING -p tcp –dport 22 -j REDIRECT –to-port 2222
 ```
 
@@ -152,7 +152,7 @@ Cowrie does just log connection but also event about what the attackers do if he
 ## Start cowrie
 
 Finally you can start cowrie (the first line is to change the user to cowrie):
-```console
+```bash
 $ sudo su cowrie
 $ cd /data/cowrie/cowrie
 $ ./bin/cowrie start
@@ -164,7 +164,7 @@ Starting cowrie: [twistd   --umask=0022 --pidfile=var/run/cowrie.pid --logger co
 ```
 
 Eventually you can check it works.
-```console
+```bash
 $ ./bin/cowrie status
 cowrie is running (PID: 19133).
 $ ss -alt
@@ -218,19 +218,19 @@ Many of these steps are detailed in /data/cowrie/cowrie/docs/sql/README.rst.
 
 ## Requirements
 First let us download the mysql utilities.
-```console
+```bash
 $ sudo apt install mysql-server mysql-client mysql-common libmysqlclient-dev
 ```
 
 ## Configuration
 
 First you can start the secure installation of mysql. It helps to remove some useless (and insecure) features.
-```console
+```bash
 $ sudo mysql_secure_installation 
 ```
 
 Then you can add a cowrie user, a database just for him (and all privilege on it).
-```console
+```bash
 $ sudo mysql
 ```
 ```sql
@@ -240,7 +240,7 @@ mysql> GRANT ALL PRIVILEGES ON cowrie.* TO 'cowrie'@'localhost';
 mysql> FLUSH PRIVILEGES;
 ```
 After you can check that the connection with the cowrie's account is ok
-```console
+```bash
 $ mysql -u cowrie -p
 Enter password: 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -251,7 +251,7 @@ Welcome to the MySQL monitor.  Commands end with ; or \g.
 ## Back to cowrie
 
 Cowrie can send logs to a mysql database. First we have to add a python package (to the virtual environment obviously):
-```console
+```bash
 $ sudo su cowrie
 $ cd /data/cowrie/cowrie
 $ source cowrie-env/bin/activate
@@ -279,7 +279,7 @@ debug = false
 ```
 
 Now, the database scheme required by cowrie must be loaded in MySQL:
-```console
+```bash
 $ cd /data/cowrie/cowrie/docs/sql
 $ mysql -u cowrie -p
 Enter password: 
@@ -312,7 +312,7 @@ mysql> EXIT
 
 Some details can be found on the [grafana website](https://docs.grafana.org/installation/debian/). Unfortunately, you cannot use `apt` directly to get it, so you have either to download it manually or add their apt repository (see below). 
 
-```console
+```bash
 $ sudo nano /etc/apt/sources.list.d/grafana.list
 ```
 Add the following line:
@@ -321,12 +321,12 @@ deb https://packages.grafana.com/oss/deb stable main
 ```
 
 To install singed packages:
-```console
+```bash
 $ curl https://packages.grafana.com/gpg.key | sudo apt-key add -
 ```
 
 Then install it!
-```console
+```bash
 $ sudo apt-get update
 $ sudo apt-get install grafana
 ```
@@ -339,14 +339,14 @@ Let us recall that we are headless so Grafana is likely to be our single entry p
 
 
 Naturally, we will use [Certbot](https://certbot.eff.org/lets-encrypt/ubuntubionic-other) to generate SSL certificates. We can add the cerbot ppa on our system so as to install it.
-```console
+```bash
 $ sudo add-apt-repository ppa:certbot/certbot
 $ sudo apt update
 $ sudo apt install certbot 
 ```
 
 With certbot we can easily create a certificate for our DOMAIN_NAME:
-```console
+```bash
 $ sudo certbot certonly --standalone -d DOMAIN_NAME
 ...
 IMPORTANT NOTES:
@@ -396,14 +396,14 @@ If you start your server, you may have an error: grafana cannot read your certif
 
 #### Lazy and ugly
 You give read + exec access to all for the folders `/etc/letsencrypt/live` and `/etc/letsencrypt/archive` (the most insecure)
-```console
+```bash
 $ sudo chmod -R a+rw /etc/letsencrypt/live
 $ sudo chmod -R a+rw /etc/letsencrypt/archive
 ```
 
 #### Boring and secure
 You create a specific group for ssl stuff (e.g. `ssl-users`) and add grafana to it.
-```console
+```bash
 $ sudo groupadd ssl-users
 $ sudo usermod -aG ssl-users grafana
 $ sudo chown -R root:ssl-users /etc/letsencrypt
@@ -428,15 +428,15 @@ Type=simple
 ...
 ```
 When a service file is changed, we must reload them:
-```console
+```bash
 $ sudo systemctl daemon-reload
 ```
 Damned! It creates a new problem: `/etc/grafana` is owned by root:grafana, so the daemon cannot read the config file... You must change to grafana:grafana:
-```console
+```bash
 $ sudo chown -R grafana:grafana /etc/grafana
 ```
 We are done, you can check the status of the service:
-```console
+```bash
 $ sudo service grafana-server status 
 ● grafana-server.service - Grafana instance
     Loaded: loaded (/usr/lib/systemd/system/grafana-server.service; disabled vendor preset: enabled)
@@ -465,11 +465,11 @@ After that, we are ready to make a fancy dashboard with fancy panels to visualiz
 ## First panels
 
 Grafana have different built-in panels but you can get more through [plugins](https://grafana.com/plugins). In particular we will use the "carpet-plot", which will represent the number of ssh connection attempts, every hour, along time. We can download it through:
-```console
+```bash
 $ sudo grafana-cli plugins install petrslavotinek-carpetplot-panel
 ```
 Once the plugin is installed, you must restart Grafana.
-```console
+```bash
 $ sudo service grafana-server restart
 ```
 
@@ -516,10 +516,10 @@ Naturally, you can change the title, the color palette etc. Grafana and its plug
 Obsiously, we want the map. Unfortunately, the Grafana plugin is not so easy to use with our information. I will do my best to find 
 a simple solution to do it from our setup.
 
-## Worldmap!
+<!-- ## Worldmap!
 
 First you need to get a geo-ip database. Some free sources exist but in this tutorial we will use those of [db-ip.com](https://db-ip.com/db/lite.php). You can either choose IP-to-City or IP-to-Country database.
 
 First you need to download the csv. 
 
-On the website 
+On the website  -->
