@@ -24,14 +24,18 @@ $color1: $color-asphalt;
 $color2: $color-mustard;
 $color3: $color-cerulean;
 
-$font1: 'Amatic SC';
+// $font1: 'Amatic SC';
+$font1: 'IBM Plex Sans Condensed';
 $font2: 'Permanent Marker';
 $font3: 'Patrick Hand';
 $font4: 'Patrick Hand SC';
-$font5: 'Shadows Into Light Two';
+// $font5: 'Shadows Into Light Two';
+$font5: $font1;
 $font6: 'Caveat Brush';
-$font7: 'Neucha';
-$font8: 'Ubuntu Mono';
+// $font7: 'Neucha';
+$font7: 'Open Sans';
+// $font8: 'Ubuntu Mono';
+$font8: 'IBM Plex Mono';
 
 
 
