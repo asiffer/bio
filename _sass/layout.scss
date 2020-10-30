@@ -40,8 +40,8 @@ figure,figcaption {
 
 img {
 	display: block;
-	max-width: 100%;
-	width: 70%;
+	height: auto;
+	max-width: 90%;
 	float: center;
 	margin: 0 auto;
 }
@@ -230,8 +230,8 @@ footer {
 
 	img {
 		display: block;
+		height: auto;
 		max-width: 100%;
-		width: 90%;
 		float: center;
 		margin: 0 auto;
 	}
