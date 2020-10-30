@@ -8,7 +8,7 @@ permalink: /bio/
 
 **2020-** R&D Engineer at Amossys
 
-**2016-2019** PhD Thesis - *New Statistical Methods for Data Mining*
+**2016-2019** PhD Thesis - [*New Statistical Methods for Data Mining*](https://ged.univ-rennes1.fr/nuxeo/site/esupversions/6f987a59-4b78-4190-918a-d33434d110b8?inline)
 
 **2014-2015** Math teacher in high school
 
