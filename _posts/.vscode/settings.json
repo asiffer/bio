@@ -1,5 +1,0 @@
-{
-    "languageTool.language": "en_GB",
-    "python.formatting.provider": "black",
-    "editor.formatOnSave": true,
-}
