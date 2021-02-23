@@ -45,7 +45,7 @@ Research related  netspot We have built an network IDS (Intrusion Detection Syst
 <meta itemprop="description" content="In addition to the research, we try to cleanly distribute our work. You could find several projects on my github, some debian packages on my ppa and also some python3 packages on PyPI, all with GPLv3 license. Below we detail some of them.
 Research related  netspot We have built an network IDS (Intrusion Detection System) upon the SPOT algoritm, called netspot. The idea is to flag extreme events whike monitoring netwrok statistics.">
 
-<meta itemprop="wordCount" content="334">
+<meta itemprop="wordCount" content="523">
 
 
 
@@ -162,9 +162,24 @@ I developped a <code>C++</code> library and its <code>python3</code> bindings to
 the Linux kernel to computes some network statistics.
 The advantage of this technology is that all heavy processing (packet parsing) is let to the the kernel.
 It notably removes context switching, leading to very high performances compared with common user-space tools (like <code>libpcap</code>).</p>
+<p>In addition, this project links several components (<code>C</code> library, <code>Go</code> server) and exposes a gRPC API.</p>
 <h4 id="wg-easy-vpn">wg-easy-vpn</h4>
+<p>I started this project at the beginning of the COVID pandemic.
+That is a tool that ease the deploymnent of Wireguard VPN
+in the admin sys point of view.
+This VPN is far simpler that OpenVPN and IPSec
+but the config file management remains a pain and <code>wg-easy-vpn</code>
+tries to hide this task.</p>
 <h4 id="arduigo">arduigo</h4>
-<hr>
+<p>Once again a tehnology I did not know: embedded systems. First of all
+I tested my Arduino board through the common user-friensly libraries
+but there were some bugs in the networking part (yes I bought the ethernet shield).
+So I decided to have a look to the vendor <code>C</code> libraries to improve my understanding
+of the interface hardware/software (and the embedded systems protocols).</p>
+<p>Finally I came across <code>tinygo</code> that allows to flash <code>Go</code> program to many boards. Unfortunately
+I did not anage to make it work on my poor Arduino board, so I rewrite some parts of the vendor
+<code>C</code> library into <code>Go</code>, <code>arduigo</code> was born.</p>
+<p>Now it is rather minimal but I managed to make LCD and Ethernet work.</p>
 
             </div>
         </article>

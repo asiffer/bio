@@ -60,10 +60,30 @@ the Linux kernel to computes some network statistics.
 The advantage of this technology is that all heavy processing (packet parsing) is let to the the kernel. 
 It notably removes context switching, leading to very high performances compared with common user-space tools (like `libpcap`).
 
+In addition, this project links several components (`C` library, `Go` server) and exposes a gRPC API.
+
 #### wg-easy-vpn
+
+I started this project at the beginning of the COVID pandemic. 
+That is a tool that ease the deploymnent of Wireguard VPN
+in the admin sys point of view. 
+This VPN is far simpler that OpenVPN and IPSec
+but the config file management remains a pain and `wg-easy-vpn`
+tries to hide this task.
 
 #### arduigo
 
----
+Once again a tehnology I did not know: embedded systems. First of all
+I tested my Arduino board through the common user-friensly libraries
+but there were some bugs in the networking part (yes I bought the ethernet shield).
+So I decided to have a look to the vendor `C` libraries to improve my understanding
+of the interface hardware/software (and the embedded systems protocols).
+
+Finally I came across `tinygo` that allows to flash `Go` program to many boards. Unfortunately
+I did not anage to make it work on my poor Arduino board, so I rewrite some parts of the vendor
+`C` library into `Go`, `arduigo` was born.
+
+Now it is rather minimal but I managed to make LCD and Ethernet work.
+
 
 
