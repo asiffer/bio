@@ -1,50 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    
-      <title>
-        Machine Learning in Nmap ::
-        Alban Siffer
-      </title>
-    
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta
-  name="description"
-  content="Notes
- The original post has been published on the Amossys blog I present some pieces of codes which are originally commented by their authors. I keep authors&amp;rsquo; comments under the format /* comments */ while my own comments use the format // comments. I use the version 7.70SVN of nmap.   First discovery After installing a basic Raspbian on my RPi, I also decided to add nmap to the system."
-/>
-<meta
-  name="keywords"
-  content=""
-/>
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="Alban Siffer">
+<meta name="description" content="Yes, the most famous network scanner embeds Machine Learning. Really? A deep neural network with many scientific keywords ? Not at all, I&#39;m more talking about *grandpa* machine learning. Let us discover it!" />
+<meta name="keywords" content=", nmap, Machine Learning" />
 <meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
 <link rel="canonical" href="https://asiffer.github.io/posts/nmap-ml/" />
 
 
+    <title>
+        
+            Machine Learning in Nmap :: Alban Siffer 
+        
+    </title>
 
 
 
-<link rel="stylesheet" href="https://asiffer.github.io/assets/style.css" />
-
-<link rel="stylesheet" href="https://asiffer.github.io/style.css" />
-
-
-<link
-  rel="apple-touch-icon-precomposed"
-  sizes="144x144"
-  href="https://asiffer.github.io/img/apple-touch-icon-144-precomposed.png"
-/>
-<link rel="shortcut icon" href="https://asiffer.github.io/img/favicon.png" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
 
 
-<link href="https://asiffer.github.io/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
 
+<link rel="stylesheet" href="/main.d7bdd8ee18bfbf4c605488a7e5b1b92cd980dfeed2bdaeab4dd5e931a7a78bc0.css">
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/nord.css">
+    
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/custom.css">
+    
+
+
+
+
+
+<meta itemprop="name" content="Machine Learning in Nmap">
+<meta itemprop="description" content="Yes, the most famous network scanner embeds Machine Learning. Really? A deep neural network with many scientific keywords ? Not at all, I&#39;m more talking about *grandpa* machine learning. Let us discover it!">
+<meta itemprop="datePublished" content="2019-06-17T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2019-06-17T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2243">
+
+
+
+<meta itemprop="keywords" content="nmap,Machine Learning," />
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Machine Learning in Nmap"/>
@@ -52,158 +56,93 @@
 
 
 
-<meta property="og:title" content="Machine Learning in Nmap" />
-<meta property="og:description" content="Yes, the most famous network scanner embeds Machine Learning. Really? A deep neural network with many scientific keywords ? Not at all, I&#39;m more talking about *grandpa* machine learning. Let us discover it!" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://asiffer.github.io/posts/nmap-ml/" />
-<meta property="article:published_time" content="2019-06-17T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-06-17T00:00:00+00:00" />
+
+
+
+
+
+    <meta property="article:published_time" content="2019-06-17 00:00:00 &#43;0000 UTC" />
 
 
 
 
 
 
-  </head>
-  <body class="dark-theme">
-    <div class="container">
-      <header class="header">
-  <span class="header__inner">
-    <a
-  href="/"
-  class="logo"
-  style="text-decoration: none;"
->
-  
-    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
-  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
-</svg>
-</span>
-    <span class="logo__text"
-      >cd /home/∇</span
-    >
-    <span class="logo__cursor"></span>
-  
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">#</span>
+            <span class="logo__text">cd /home/∇</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
 </a>
 
-    <span class="header__right">
-      
-        <nav class="menu">
-  <ul class="menu__inner menu__inner--desktop">
-    
-      
-        
-          <li><a href="/about/">about</a></li>
-        
-      
-        
-          <li><a href="/research/">research</a></li>
-        
-      
-        
-          <li><a href="/software/">software</a></li>
-        
-      
-        
-          <li><a href="/posts/">posts</a></li>
-        
-      
-    
-  </ul>
 
-  <ul class="menu__inner menu__inner--mobile">
-    
-      
-        <li><a href="/about/">about</a></li>
-      
-    
-      
-        <li><a href="/research/">research</a></li>
-      
-    
-      
-        <li><a href="/software/">software</a></li>
-      
-    
-      
-        <li><a href="/posts/">posts</a></li>
-      
-    
-  </ul>
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/about/">about</a></li><li><a href="/research/">research</a></li><li><a href="/software/">software</a></li><li><a href="/posts/">posts</a></li>
+    </ul>
 </nav>
 
-        <span class="menu-trigger">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-          </svg>
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
         </span>
-      
-      <span class="theme-toggle">
-        <svg
-  class="theme-toggler"
-  width="24"
-  height="24"
-  viewBox="0 0 48 48"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path
-    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
-  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
-  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
-  />
-</svg>
-
-      </span>
     </span>
-  </span>
 </header>
 
 
-      <div class="content">
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        11 minutes
+
         
-  
-  
-
-  <div class="post">
-    <h1 class="post-title">Machine Learning in Nmap</h1>
-    <div class="post-meta">
-      
-        <span class="post-date">
-          2019-06-17
-        </span>
-
-        
-          
-        
-      
-
-      
-        <span class="post-author"
-          >— Written by Alban Siffer</span
-        >
-
-
-      
+      </p>
     </div>
 
-    
-      <span class="post-tags">
-        
-          <a href="https://asiffer.github.io/tags/nmap/">#nmap</a>&nbsp;
-        
-          <a href="https://asiffer.github.io/tags/machine-learning/">#Machine Learning</a>&nbsp;
-        
-      </span>
-    
+    <article>
+      <h1 class="post-title">
+        <a href="https://asiffer.github.io/posts/nmap-ml/">Machine Learning in Nmap</a>
+      </h1>
 
-    
-
-    <div class="post-content">
       
-        <h2>Table of Contents</h2>
-        <aside class="table-of-contents"><nav id="TableOfContents">
+        <div class="post-excerpt">Yes, the most famous network scanner embeds Machine Learning. Really? A deep neural network with many scientific keywords ? Not at all, I&#39;m more talking about *grandpa* machine learning. Let us discover it!</div>
+      
+
+      
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
   <ul>
     <li><a href="#first-discovery">First discovery</a></li>
     <li><a href="#deep-learning">Deep learning</a></li>
@@ -215,9 +154,12 @@
     <li><a href="#conclusion">Conclusion</a></li>
     <li><a href="#ideas-to-improve-nmap">Ideas to improve NMAP</a></li>
   </ul>
-</nav></aside>
-      
-      <hr>
+</nav>
+        </aside>
+        <hr />
+
+      <div class="post-content">
+        <hr>
 <p><strong>Notes</strong></p>
 <ul>
 <li>The original post has been published on the <a href="https://blog.amossys.fr/nmap-ml.html">Amossys blog</a></li>
@@ -398,7 +340,7 @@ When a new observation has to be classified, each classifier can provide the pro
 <p>Forget about fancy deep stuff algorithms! <code>nmap</code> uses a logistic regression to estimate the probability of a fingerprint to belong to a certain class (OS). Furthermore, it computes a novelty score which aims to avoid misclassification.
 The whole process is summed up below (for official details, you can look at <a href="https://nmap.org/book/osdetect-guess.html#osdetect-guess-ipv6">IPv6 Matching</a> )</p>
 <p>
-  <img src="/images/nmap/nmap.png"  class="left"  />
+    <img src="/images/nmap/nmap.png"  class="left"  />
 
 
 <div class="caption">
@@ -420,90 +362,116 @@ The whole process is summed up below (for official details, you can look at <a h
 <p>Furthermore, the current process computes the novelty of a new fingerprint but this piece of information is not exploited either while it could improve our detection engine.</p>
 <p><strong>Can we use a even more powerful workflow?</strong> It is hard to talk about the choice of the algorithms. The number of features is quite high (695), but even if <code>liblinear</code> is made for large scale datasets, I would rather have a look to other classifiers like <a href="https://en.wikipedia.org/wiki/Random_forest">Random Forest</a> which does not need scaled data, may select the most relevant features and fits all the classes at the same time (no one-versus-all approach). About novelty detection, the computed distance is a bit uncommon. From the random forest classifier, it is possible to set a kind of &ldquo;certainty threshold&rdquo; below which the fingerprint is not classified. Another way would be to compute the <a href="https://en.wikipedia.org/wiki/Local_outlier_factor">Local Outlier Factor</a> (LOF) to check if the fingerprint looks like its neighbours (but it requires several labeled samples).</p>
 
-    </div>
-    
-      
-        <div class="pagination">
-          <div class="pagination__title">
-            <span class="pagination__title-h"
-              >Read other posts</span
-            >
-            <hr />
-          </div>
-          <div class="pagination__buttons">
-            
-              <span class="button previous">
-                <a href="https://asiffer.github.io/posts/numpy/">
-                  <span class="button__icon">←</span>
-                  <span class="button__text">Passing numpy array to shared library</span>
-                </a>
-              </span>
-            
-            
-              <span class="button next">
-                <a href="https://asiffer.github.io/posts/threat-intel/">
-                  <span class="button__text">Fancy Threat Intel&#39; with Cowrie/MySQL/Grafana stack</span>
-                  <span class="button__icon">→</span>
-                </a>
-              </span>
-            
-          </div>
-        </div>
-      
-    
+      </div>
+    </article>
 
-    
+    <hr />
+
+    <div class="post-info">
       
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="https://asiffer.github.io/tags/nmap/">nmap</a></span>
+        <span class="tag"><a href="https://asiffer.github.io/tags/machine-learning/">Machine Learning</a></span>
+        
+    </p>
+
+      
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        2243 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2019-06-17 02:00
         
 
-      
-    
-  </div>
-
-      </div>
-
-      
-        <footer class="footer">
-  <div class="footer__inner">
-    
-      <a
-  href="/"
-  class="logo"
-  style="text-decoration: none;"
->
-  
-    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
-  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
-</svg>
-</span>
-    <span class="logo__text"
-      >cd /home/∇</span
-    >
-    <span class="logo__cursor"></span>
-  
-</a>
-
-      <div class="copyright">
-        <span
-          >© 2021 Powered by
-          <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a></span
-        >
-        <span
-          >Theme created by
-          <a href="https://twitter.com/panr" target="_blank" rel="noopener">panr</a></span
-        >
-      </div>
-    
-  </div>
-</footer>
-
-<script src="https://asiffer.github.io/assets/main.js"></script>
-<script src="https://asiffer.github.io/assets/prism.js"></script>
-
-
-      
+         
+          
+        
+      </p>
     </div>
 
     
-  </body>
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h"></span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://asiffer.github.io/posts/numpy/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Passing numpy array to shared library</span>
+              </a>
+            </span>
+          
+
+          
+            <span class="button next">
+              <a href="https://asiffer.github.io/posts/threat-intel/">
+                <span class="button__text">Fancy Threat Intel&#39; with Cowrie/MySQL/Grafana stack</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2021</span>
+            
+            <span><a href="https://asiffer.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
+          </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="/bundle.min.af435e44374f1e99a669ea8cd5bb9a2fceed80588941a451bfddb66b86a67c9f40b0f417e9543a763f809aa7e9300d7b1d69bf99615810ba02ac70396d50fad5.js" integrity="sha512-r0NeRDdPHpmmaeqM1buaL87tgFiJQaRRv922a4amfJ9AsPQX6VQ6dj&#43;AmqfpMA17HWm/mWFYELoCrHA5bVD61Q=="></script>
+
+
+
+    </body>
 </html>

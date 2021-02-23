@@ -2,9 +2,6 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Machine Learning on Alban Siffer</title>
-    
-    
-    
     <link>https://asiffer.github.io/tags/machine-learning/</link>
     <description>Recent content in Machine Learning on Alban Siffer</description>
     <generator>Hugo -- gohugo.io</generator>
@@ -20,18 +17,8 @@
       <pubDate>Mon, 17 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>https://asiffer.github.io/posts/nmap-ml/</guid>
-      <description>
-        
-          
-          
-          
-        
-        
-        
-          Yes, the most famous network scanner embeds Machine Learning. Really? A deep neural network with many scientific keywords ? Not at all, I&#39;m more talking about *grandpa* machine learning. Let us discover it!
-          
-        
-        </description>
+      <description>Notes
+ The original post has been published on the Amossys blog I present some pieces of codes which are originally commented by their authors. I keep authors&amp;rsquo; comments under the format /* comments */ while my own comments use the format // comments. I use the version 7.70SVN of nmap.   First discovery After installing a basic Raspbian on my RPi, I also decided to add nmap to the system.</description>
     </item>
     
   </channel>

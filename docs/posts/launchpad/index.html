@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    
-      <title>
-        Distribute your work with Git and Launchpad ::
-        Alban Siffer
-      </title>
-    
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta
-  name="description"
-  content="Introduction Let us consider you have developped a nice tool (or a nice library). You make it work on your laptop but, more than that, you put all your code on GitHub of GitLab, for instance. As you are smart, you made a useful Makefile so as to help others to use your work through the famous process:
-git clone https://remote.site/mytool.git cd mytool/ make make install However, it looks a bit handmade: of course, you don&amp;rsquo;t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone."
-/>
-<meta
-  name="keywords"
-  content=""
-/>
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Introduction Let us consider you have developped a nice tool (or a nice library). You make it work on your laptop but, more than that, you put all your code on GitHub of GitLab, for instance. As you are smart, you made a useful Makefile so as to help others to use your work through the famous process:
+git clone https://remote.site/mytool.git cd mytool/ make make install However, it looks a bit handmade: of course, you don&amp;rsquo;t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone." />
+<meta name="keywords" content="" />
 <meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
 <link rel="canonical" href="https://asiffer.github.io/posts/launchpad/" />
 
 
+    <title>
+        
+            Distribute your work with Git and Launchpad :: Alban Siffer 
+        
+    </title>
 
 
 
-<link rel="stylesheet" href="https://asiffer.github.io/assets/style.css" />
-
-<link rel="stylesheet" href="https://asiffer.github.io/style.css" />
-
-
-<link
-  rel="apple-touch-icon-precomposed"
-  sizes="144x144"
-  href="https://asiffer.github.io/img/apple-touch-icon-144-precomposed.png"
-/>
-<link rel="shortcut icon" href="https://asiffer.github.io/img/favicon.png" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
 
 
-<link href="https://asiffer.github.io/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
-<link href="https://asiffer.github.io/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
 
+<link rel="stylesheet" href="/main.d7bdd8ee18bfbf4c605488a7e5b1b92cd980dfeed2bdaeab4dd5e931a7a78bc0.css">
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/nord.css">
+    
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/custom.css">
+    
+
+
+
+
+
+<meta itemprop="name" content="Distribute your work with Git and Launchpad">
+<meta itemprop="description" content="Introduction Let us consider you have developped a nice tool (or a nice library). You make it work on your laptop but, more than that, you put all your code on GitHub of GitLab, for instance. As you are smart, you made a useful Makefile so as to help others to use your work through the famous process:
+git clone https://remote.site/mytool.git cd mytool/ make make install However, it looks a bit handmade: of course, you don&rsquo;t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone.">
+<meta itemprop="datePublished" content="2018-08-07T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2018-08-07T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1901">
+
+
+
+<meta itemprop="keywords" content="" />
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Distribute your work with Git and Launchpad"/>
@@ -53,148 +59,91 @@ git clone https://remote.site/mytool.git cd mytool/ make make install However, i
 
 
 
-<meta property="og:title" content="Distribute your work with Git and Launchpad" />
-<meta property="og:description" content="Introduction Let us consider you have developped a nice tool (or a nice library). You make it work on your laptop but, more than that, you put all your code on GitHub of GitLab, for instance. As you are smart, you made a useful Makefile so as to help others to use your work through the famous process:
-git clone https://remote.site/mytool.git cd mytool/ make make install However, it looks a bit handmade: of course, you don&rsquo;t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://asiffer.github.io/posts/launchpad/" />
-<meta property="article:published_time" content="2018-08-07T00:00:00+00:00" />
-<meta property="article:modified_time" content="2018-08-07T00:00:00+00:00" />
+
+
+
+
+
+    <meta property="article:published_time" content="2018-08-07 00:00:00 &#43;0000 UTC" />
 
 
 
 
 
 
-  </head>
-  <body class="dark-theme">
-    <div class="container">
-      <header class="header">
-  <span class="header__inner">
-    <a
-  href="/"
-  class="logo"
-  style="text-decoration: none;"
->
-  
-    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
-  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
-</svg>
-</span>
-    <span class="logo__text"
-      >cd /home/∇</span
-    >
-    <span class="logo__cursor"></span>
-  
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">#</span>
+            <span class="logo__text">cd /home/∇</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
 </a>
 
-    <span class="header__right">
-      
-        <nav class="menu">
-  <ul class="menu__inner menu__inner--desktop">
-    
-      
-        
-          <li><a href="/about/">about</a></li>
-        
-      
-        
-          <li><a href="/research/">research</a></li>
-        
-      
-        
-          <li><a href="/software/">software</a></li>
-        
-      
-        
-          <li><a href="/posts/">posts</a></li>
-        
-      
-    
-  </ul>
 
-  <ul class="menu__inner menu__inner--mobile">
-    
-      
-        <li><a href="/about/">about</a></li>
-      
-    
-      
-        <li><a href="/research/">research</a></li>
-      
-    
-      
-        <li><a href="/software/">software</a></li>
-      
-    
-      
-        <li><a href="/posts/">posts</a></li>
-      
-    
-  </ul>
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/about/">about</a></li><li><a href="/research/">research</a></li><li><a href="/software/">software</a></li><li><a href="/posts/">posts</a></li>
+    </ul>
 </nav>
 
-        <span class="menu-trigger">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-          </svg>
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
         </span>
-      
-      <span class="theme-toggle">
-        <svg
-  class="theme-toggler"
-  width="24"
-  height="24"
-  viewBox="0 0 48 48"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path
-    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
-  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
-  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
-  />
-</svg>
-
-      </span>
     </span>
-  </span>
 </header>
 
 
-      <div class="content">
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        9 minutes
+
         
-  
-  
-
-  <div class="post">
-    <h1 class="post-title">Distribute your work with Git and Launchpad</h1>
-    <div class="post-meta">
-      
-        <span class="post-date">
-          2018-08-07
-        </span>
-
-        
-          
-        
-      
-
-      
-
-
-      
+      </p>
     </div>
 
-    
+    <article>
+      <h1 class="post-title">
+        <a href="https://asiffer.github.io/posts/launchpad/">Distribute your work with Git and Launchpad</a>
+      </h1>
 
-    
-
-    <div class="post-content">
       
-        <h2>Table of Contents</h2>
-        <aside class="table-of-contents"><nav id="TableOfContents">
+
+      
+        <hr />
+        <aside id="toc">
+          <div class="toc-title">Table of Contents</div>
+          <nav id="TableOfContents">
   <ul>
     <li><a href="#introduction">Introduction</a></li>
     <li><a href="#step-1-creating-a-debian-package">Step 1: Creating a debian package</a>
@@ -220,9 +169,12 @@ git clone https://remote.site/mytool.git cd mytool/ make make install However, i
       </ul>
     </li>
   </ul>
-</nav></aside>
-      
-      <h2 id="introduction">Introduction</h2>
+</nav>
+        </aside>
+        <hr />
+
+      <div class="post-content">
+        <h2 id="introduction">Introduction</h2>
 <p>Let us consider you have developped a nice tool (or a nice library). You make it work on your laptop but, more than that, you put all your code on <a href="https://github.com/">GitHub</a> of <a href="https://about.gitlab.com/">GitLab</a>, for instance. As you are smart, you made a useful <code>Makefile</code> so as to help others to use your work through the famous process:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone https://remote.site/mytool.git
 cd mytool/
@@ -414,83 +366,101 @@ git commit -m &quot;your minor changes&quot;
 git push origin master
 git push launchpad master
 </code></pre>
-    </div>
-    
-      
-        <div class="pagination">
-          <div class="pagination__title">
-            <span class="pagination__title-h"
-              >Read other posts</span
-            >
-            <hr />
-          </div>
-          <div class="pagination__buttons">
-            
-              <span class="button previous">
-                <a href="https://asiffer.github.io/posts/threat-intel/">
-                  <span class="button__icon">←</span>
-                  <span class="button__text">Fancy Threat Intel&#39; with Cowrie/MySQL/Grafana stack</span>
-                </a>
-              </span>
-            
-            
-          </div>
-        </div>
-      
-    
+      </div>
+    </article>
 
-    
+    <hr />
+
+    <div class="post-info">
       
+      
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        1901 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2018-08-07 02:00
         
 
-      
-    
-  </div>
-
-      </div>
-
-      
-        <footer class="footer">
-  <div class="footer__inner">
-    
-      <a
-  href="/"
-  class="logo"
-  style="text-decoration: none;"
->
-  
-    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
-  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
-</svg>
-</span>
-    <span class="logo__text"
-      >cd /home/∇</span
-    >
-    <span class="logo__cursor"></span>
-  
-</a>
-
-      <div class="copyright">
-        <span
-          >© 2021 Powered by
-          <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a></span
-        >
-        <span
-          >Theme created by
-          <a href="https://twitter.com/panr" target="_blank" rel="noopener">panr</a></span
-        >
-      </div>
-    
-  </div>
-</footer>
-
-<script src="https://asiffer.github.io/assets/main.js"></script>
-<script src="https://asiffer.github.io/assets/prism.js"></script>
-
-
-      
+         
+          
+        
+      </p>
     </div>
 
     
-  </body>
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h"></span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="https://asiffer.github.io/posts/threat-intel/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Fancy Threat Intel&#39; with Cowrie/MySQL/Grafana stack</span>
+              </a>
+            </span>
+          
+
+          
+        </div>
+      </div>
+    
+
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2021</span>
+            
+            <span><a href="https://asiffer.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
+          </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="/bundle.min.af435e44374f1e99a669ea8cd5bb9a2fceed80588941a451bfddb66b86a67c9f40b0f417e9543a763f809aa7e9300d7b1d69bf99615810ba02ac70396d50fad5.js" integrity="sha512-r0NeRDdPHpmmaeqM1buaL87tgFiJQaRRv922a4amfJ9AsPQX6VQ6dj&#43;AmqfpMA17HWm/mWFYELoCrHA5bVD61Q=="></script>
+
+
+
+    </body>
 </html>
