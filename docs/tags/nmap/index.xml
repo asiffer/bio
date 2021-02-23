@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>nmap on Alban Siffer</title>
+    
+    
+    
+    <link>https://asiffer.github.io/tags/nmap/</link>
+    <description>Recent content in nmap on Alban Siffer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 17 Jun 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://asiffer.github.io/tags/nmap/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Machine Learning in Nmap</title>
+      <link>https://asiffer.github.io/posts/nmap-ml/</link>
+      <pubDate>Mon, 17 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://asiffer.github.io/posts/nmap-ml/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Yes, the most famous network scanner embeds Machine Learning. Really? A deep neural network with many scientific keywords ? Not at all, I&#39;m more talking about *grandpa* machine learning. Let us discover it!
+          
+        
+        </description>
+    </item>
+    
+  </channel>
+</rss>

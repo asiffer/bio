@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Alban Siffer</title>
+    
+    
+    
+    <link>https://asiffer.github.io/posts/</link>
+    <description>Recent content in Posts on Alban Siffer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Jan 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://asiffer.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Desktop Elements Detection Using Deep Learning</title>
+      <link>https://asiffer.github.io/posts/desktop-elements-detection-using-deep-learning/</link>
+      <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://asiffer.github.io/posts/desktop-elements-detection-using-deep-learning/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          We detail how we detect desktop components on screenshots. The method we present is a part of our final solution that made us win the ECW2020 challenge.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Reverse ssh tunnel</title>
+      <link>https://asiffer.github.io/posts/reverse-ssh/</link>
+      <pubDate>Fri, 30 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://asiffer.github.io/posts/reverse-ssh/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          How to connect to a remote machine behind a NAT with a reverse ssh tunnel
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Passing numpy array to shared library</title>
+      <link>https://asiffer.github.io/posts/numpy/</link>
+      <pubDate>Sun, 29 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://asiffer.github.io/posts/numpy/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Here we explain how we can pass numpy arrays to C (C++ and Go) shared libraries
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Machine Learning in Nmap</title>
+      <link>https://asiffer.github.io/posts/nmap-ml/</link>
+      <pubDate>Mon, 17 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://asiffer.github.io/posts/nmap-ml/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Yes, the most famous network scanner embeds Machine Learning. Really? A deep neural network with many scientific keywords ? Not at all, I&#39;m more talking about *grandpa* machine learning. Let us discover it!
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Fancy Threat Intel&#39; with Cowrie/MySQL/Grafana stack</title>
+      <link>https://asiffer.github.io/posts/threat-intel/</link>
+      <pubDate>Fri, 25 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://asiffer.github.io/posts/threat-intel/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          We all dream of this world map with cyber attacks between countries like this one or the one of Kaspersky. In this post, we will try to do threat intelligence at our modest level. We will consider a basic system open on the Internet, in the grip of cyber-attackers. In this context, we will collect attacks information so as to make a fancy dashboard to visualize what is going on.
+          
+        
+        </description>
+    </item>
+    
+    <item>
+      <title>Distribute your work with Git and Launchpad</title>
+      <link>https://asiffer.github.io/posts/launchpad/</link>
+      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://asiffer.github.io/posts/launchpad/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Introduction Let us consider you have developped a nice tool (or a nice library). You make it work on your laptop but, more than that, you put all your code on GitHub of GitLab, for instance. As you are smart, you made a useful Makefile so as to help others to use your work through the famous process:
+git clone https://remote.site/mytool.git cd mytool/ make make install However, it looks a bit handmade: of course, you don&amp;rsquo;t need to be a computer science expert to enter these commands, but this is not as easy as installing an app on your smartphone.
+          
+        
+        </description>
+    </item>
+    
+  </channel>
+</rss>

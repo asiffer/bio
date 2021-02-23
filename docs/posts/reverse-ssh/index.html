@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Reverse ssh tunnel ::
+        Alban Siffer
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="In this post we explain a way to connect to a remote machine behind a NAT with a reverse ssh tunnel. Here we use a third party server as we assume that both local and distant machines are not publicly available (neither public IP nor port forwarding).
+Because of NAT, we must first set-up a tunnel between the distant server and the proxy. The proxy is running a ssh server listening on port 22000 (we can connect to it with username user and a secret password):"
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://asiffer.github.io/posts/reverse-ssh/" />
+
+
+
+
+
+<link rel="stylesheet" href="https://asiffer.github.io/assets/style.css" />
+
+<link rel="stylesheet" href="https://asiffer.github.io/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://asiffer.github.io/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://asiffer.github.io/img/favicon.png" />
+
+
+<link href="https://asiffer.github.io/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://asiffer.github.io/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://asiffer.github.io/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://asiffer.github.io/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://asiffer.github.io/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://asiffer.github.io/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Reverse ssh tunnel"/>
+<meta name="twitter:description" content="How to connect to a remote machine behind a NAT with a reverse ssh tunnel"/>
+
+
+
+<meta property="og:title" content="Reverse ssh tunnel" />
+<meta property="og:description" content="How to connect to a remote machine behind a NAT with a reverse ssh tunnel" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://asiffer.github.io/posts/reverse-ssh/" />
+<meta property="article:published_time" content="2020-10-30T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-10-30T00:00:00+00:00" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >cd /home/∇</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about/">about</a></li>
+        
+      
+        
+          <li><a href="/research/">research</a></li>
+        
+      
+        
+          <li><a href="/software/">software</a></li>
+        
+      
+        
+          <li><a href="/posts/">posts</a></li>
+        
+      
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about/">about</a></li>
+      
+    
+      
+        <li><a href="/research/">research</a></li>
+      
+    
+      
+        <li><a href="/software/">software</a></li>
+      
+    
+      
+        <li><a href="/posts/">posts</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Reverse ssh tunnel</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2020-10-30
+        </span>
+
+        
+          
+        
+      
+
+      
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>In this post we explain a way to connect to a remote machine behind a NAT with a reverse ssh tunnel. Here we use a third
+party server as we assume that both local and distant machines are not publicly available (neither public IP nor port forwarding).</p>
+
+  <img src="/images/reverse-ssh/reverse_ssh1.png"  alt="goal"  class="center"  />
+
+
+<p>Because of NAT, we must first set-up a tunnel between the distant server and the proxy.
+The proxy is running a ssh server listening on port <code>22000</code> (we can connect to it with username <code>user</code> and a secret password):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sshd -D -p <span style="color:#ae81ff">22000</span> -o <span style="color:#e6db74">&#34;AllowTcpForwarding=all&#34;</span>
+</code></pre></div><p>The distant machine is also running a ssh server on port <code>10000</code>.
+From the distant machine, we must set up the tunnel</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -NR 22100:localhost:10000 -p <span style="color:#ae81ff">22000</span> user@server.cloud.com
+</code></pre></div><p>What does this command do? Taking it from the end, it connects to the proxy server (<code>-p 22000 user@server.cloud.com</code>). Then it tells the proxy server to bind its port <code>22100</code> to the ssh server of the distant machine.</p>
+
+  <img src="/images/reverse-ssh/reverse_ssh2.png"  alt="goal"  class="center"  />
+
+
+<p>Thus, from the proxy, you can connect (with ssh) to <code>localhost:22100</code> and you will have a remote session on the distant machine (if you have the right credentials).</p>
+<p>Now we just have to connect our local machine to the proxy and hop to  <code>localhost:22100</code>. Below we detail a practical example.</p>
+<p>Let us imagine that our distant machine only accepts public key authentication (user <code>guest</code> with private key stored in <code>~/.ssh/distant</code>).
+We can ease the connection, with the following ssh config file (<code>~/.ssh/config</code>).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#a6e22e">Host proxy</span>
+    <span style="color:#a6e22e">User user</span>
+    <span style="color:#a6e22e">Port 22000</span>
+    <span style="color:#a6e22e">Hostname server.cloud.com</span>
+
+<span style="color:#a6e22e">Host distant</span>
+    <span style="color:#75715e"># Connect to the host &#39;proxy&#39; </span>
+    <span style="color:#75715e"># (defined above)</span>
+    <span style="color:#a6e22e">ProxyCommand ssh -W %h:%p proxy</span>
+    <span style="color:#75715e"># Here you can imagine that you are</span>
+    <span style="color:#75715e"># on the proxy server. The following</span>
+    <span style="color:#75715e"># information are used to finally </span>
+    <span style="color:#75715e"># reach the distant machine.</span>
+    <span style="color:#a6e22e">User guest</span>
+    <span style="color:#a6e22e">Port 22100</span>
+    <span style="color:#a6e22e">Hostname localhost</span>
+    <span style="color:#a6e22e">IdentityFile ~/.ssh/distant</span>
+</code></pre></div><p>Now we just have to type</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh distant
+</code></pre></div><p>When you run this command, it uses the <code>ProxyCommand</code> to connect to the proxy. Briefly it binds a local port to the ssh proxy server. Then it uses the tunnel (<code>localhost:22100</code>)
+to reach the distant machine: user <code>guest</code> with the locally stored authentication key  <code>~/.ssh/distant</code>.</p>
+<p>In particular, this method prevents from forwarding the ssh agent to the proxy server, so it does no expose local ssh secrets on the proxy server.
+Credentials are merely passed through the whole [and encrypted] tunnel (local &ndash; distant) and cannot be highjacked.</p>
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+              <span class="button previous">
+                <a href="https://asiffer.github.io/posts/desktop-elements-detection-using-deep-learning/">
+                  <span class="button__icon">←</span>
+                  <span class="button__text">Desktop Elements Detection Using Deep Learning</span>
+                </a>
+              </span>
+            
+            
+              <span class="button next">
+                <a href="https://asiffer.github.io/posts/numpy/">
+                  <span class="button__text">Passing numpy array to shared library</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >cd /home/∇</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+        <span
+          >© 2021 Powered by
+          <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a></span
+        >
+        <span
+          >Theme created by
+          <a href="https://twitter.com/panr" target="_blank" rel="noopener">panr</a></span
+        >
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://asiffer.github.io/assets/main.js"></script>
+<script src="https://asiffer.github.io/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>
