@@ -1,7 +1,8 @@
-baseURL: http://example.org/
+baseURL: https://asiffer.github.io
 languageCode: en-us
 title: Alban Siffer
-theme: hello-friend-ng
+theme: hello-friend
+publishDir: ./docs
 
 params:
   homeSubtitle: "R&D Engineer - Cyber/AI"
